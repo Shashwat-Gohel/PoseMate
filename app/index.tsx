@@ -32,7 +32,7 @@ export default function HomeScreen() {
             <Ionicons name="aperture-outline" size={22} color={colors.accent} />
           </View>
           <Text style={styles.brand}>PoseMate</Text>
-          <Pressable accessibilityLabel="Open settings" style={styles.iconButton}>
+          <Pressable accessibilityLabel="Open settings" style={styles.iconButton} onPress={() => router.push('/settings')}>
             <Ionicons name="settings-outline" size={21} color={colors.textMuted} />
           </Pressable>
         </View>

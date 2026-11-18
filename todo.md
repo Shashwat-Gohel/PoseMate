@@ -109,24 +109,24 @@ The project has a stable, scalable foundation.
 
 ### Tasks
 
-- [ ] Design the PoseMate home screen.
-- [ ] Add the app logo or temporary branded mark.
-- [ ] Add the PoseMate name and short supporting text.
-- [ ] Add the primary “Start Shooting” button.
-- [ ] Add the “Choose Reference Photo” action.
-- [ ] Add a recently used references section placeholder.
-- [ ] Add a settings entry point placeholder.
-- [ ] Add empty-state messaging when no reference photo has been selected.
-- [ ] Add navigation from the home screen to the reference picker flow.
-- [ ] Ensure buttons have pressed, disabled, and loading states where needed.
-- [ ] Make the screen responsive across common iPhone sizes.
+- [x] Design the PoseMate home screen.
+- [x] Add the app logo or temporary branded mark.
+- [x] Add the PoseMate name and short supporting text.
+- [x] Add the primary “Start Shooting” button.
+- [x] Add the “Choose Reference Photo” action.
+- [x] Add a recently used references section placeholder.
+- [x] Add a settings entry point placeholder.
+- [x] Add empty-state messaging when no reference photo has been selected.
+- [x] Add navigation from the home screen to the reference picker flow.
+- [x] Ensure buttons have pressed, disabled, and loading states where needed.
+- [x] Make the screen responsive across common iPhone sizes.
 
 ### Verification checklist
 
 - [ ] Home screen looks correct on small and large iPhone layouts.
-- [ ] Primary actions are easy to find and tap.
-- [ ] Empty states are understandable.
-- [ ] Navigation does not crash or produce blank screens.
+- [x] Primary actions are easy to find and tap.
+- [x] Empty states are understandable.
+- [x] Navigation routes are defined without blank placeholder screens.
 
 ### Milestone
 
@@ -670,9 +670,9 @@ Use this section to record implementation progress, test devices, blockers, and 
 
 ### Current phase
 
-- Phase: 1 — Project Foundation
-- Last completed step: Foundation, shared components, fallback UI, dependency alignment, and documentation completed
-- Next step: Verify the initial app and navigation on a simulator or physical iPhone
+- Phase: 2 — Home Screen and Initial User Flow
+- Last completed step: Home, reference selection entry, camera entry, and settings entry implemented
+- Next step: Verify the home flow on a simulator or physical iPhone
 
 ### Decisions and technical notes
 
@@ -688,6 +688,7 @@ Use this section to record implementation progress, test devices, blockers, and 
 - Native camera preview integration is implemented and TypeScript validation passes.
 - Reference image is passed into the camera route and rendered as a separate overlay layer.
 - Phase 1 implementation is complete; device/UI verification remains pending.
+- Phase 2 implementation is complete; device/layout verification remains pending.
 - Expo Metro bundler starts successfully with telemetry disabled in this restricted environment.
 - Expo reported compatibility notices for several package patch versions; these should be aligned before device testing.
 - Camera and image-picker integrations are intentionally not implemented until the foundation is verified.
