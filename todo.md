@@ -143,17 +143,17 @@ The user can open PoseMate and understand how to begin.
 
 ### Tasks
 
-- [ ] Install and configure the compatible Expo image-picker package.
-- [ ] Request photo-library permission only when the user starts photo selection.
+- [x] Install and configure the compatible Expo image-picker package.
+- [x] Request photo-library permission only when the user starts photo selection.
 - [ ] Explain why photo access is needed when required.
 - [ ] Handle permission granted state.
-- [ ] Handle permission denied state.
+- [x] Handle permission denied state.
 - [ ] Handle limited photo-library access where supported.
-- [ ] Handle user cancellation without showing an error.
-- [ ] Restrict selection to a single image for the MVP.
+- [x] Handle user cancellation without showing an error.
+- [x] Restrict selection to a single image for the MVP.
 - [ ] Support common image formats returned by the native picker.
-- [ ] Store the selected image URI in app state.
-- [ ] Display the selected reference image on the home screen.
+- [x] Store the selected image URI in app state.
+- [x] Display the selected reference image on the home screen.
 - [ ] Add a replace-reference action.
 - [ ] Add a remove-reference action.
 - [ ] Add basic image-loading and image-error states.
@@ -684,6 +684,7 @@ Use this section to record implementation progress, test devices, blockers, and 
 ### Known blockers
 
 - Dependencies are installed; npm reported 23 audit findings from the dependency tree.
+- Native image picker integration is implemented and TypeScript validation passes.
 - Expo Metro bundler starts successfully with telemetry disabled in this restricted environment.
 - Expo reported compatibility notices for several package patch versions; these should be aligned before device testing.
 - Camera and image-picker integrations are intentionally not implemented until the foundation is verified.

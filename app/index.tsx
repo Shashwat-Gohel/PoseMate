@@ -1,10 +1,29 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import { useState } from 'react';
 import { colors, radii, spacing } from '@/constants/theme';
 
 export default function HomeScreen() {
+  const [referenceUri, setReferenceUri] = useState<string | null>(null);
+
+  const chooseReferencePhoto = async () => {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) return;
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: false,
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets[0]?.uri) {
+      setReferenceUri(result.assets[0].uri);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -27,10 +46,16 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.previewCard}>
-          <View style={styles.previewGlow} />
-          <Ionicons name="images-outline" size={40} color={colors.accent} />
-          <Text style={styles.previewTitle}>Your next great photo starts here.</Text>
-          <Text style={styles.previewBody}>Choose a reference pose to begin.</Text>
+          {referenceUri ? (
+            <Image source={{ uri: referenceUri }} style={styles.referenceImage} resizeMode="cover" />
+          ) : (
+            <>
+              <View style={styles.previewGlow} />
+              <Ionicons name="images-outline" size={40} color={colors.accent} />
+              <Text style={styles.previewTitle}>Your next great photo starts here.</Text>
+              <Text style={styles.previewBody}>Choose a reference pose to begin.</Text>
+            </>
+          )}
         </View>
 
         <View style={styles.actions}>
@@ -39,7 +64,7 @@ export default function HomeScreen() {
             <Text style={styles.primaryLabel}>Start Shooting</Text>
             <Ionicons name="arrow-forward" size={19} color={colors.background} />
           </Pressable>
-          <Pressable style={styles.secondaryButton}>
+          <Pressable style={styles.secondaryButton} onPress={chooseReferencePhoto}>
             <Ionicons name="image-outline" size={20} color={colors.accent} />
             <Text style={styles.secondaryLabel}>Choose Reference Photo</Text>
           </Pressable>
@@ -47,7 +72,7 @@ export default function HomeScreen() {
 
         <View style={styles.footer}>
           <Text style={styles.footerLabel}>RECENT REFERENCES</Text>
-          <Text style={styles.emptyText}>Your recent poses will appear here.</Text>
+          <Text style={styles.emptyText}>{referenceUri ? 'Reference selected for this session.' : 'Your recent poses will appear here.'}</Text>
         </View>
       </View>
     </SafeAreaView>
@@ -85,6 +110,7 @@ const styles = StyleSheet.create({
   previewGlow: { position: 'absolute', width: 160, height: 160, borderRadius: 80, backgroundColor: '#3A2D22', opacity: 0.5 },
   previewTitle: { color: colors.text, fontSize: 16, fontWeight: '600', marginTop: spacing.md },
   previewBody: { color: colors.textMuted, fontSize: 13, marginTop: spacing.xs },
+  referenceImage: { width: '100%', height: '100%' },
   actions: { gap: spacing.sm, marginTop: spacing.lg },
   primaryButton: { height: 58, borderRadius: radii.md, backgroundColor: colors.accent, flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.md, gap: spacing.sm },
   primaryLabel: { flex: 1, color: colors.background, fontSize: 16, fontWeight: '700' },
