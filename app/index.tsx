@@ -8,6 +8,7 @@ import { colors, radii, spacing } from '@/constants/theme';
 
 export default function HomeScreen() {
   const [referenceUri, setReferenceUri] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
   const [isPicking, setIsPicking] = useState(false);
   const [pickerError, setPickerError] = useState<string | null>(null);
 
@@ -28,6 +29,7 @@ export default function HomeScreen() {
       });
 
       if (!result.canceled && result.assets[0]?.uri) {
+        setImageError(false);
         setReferenceUri(result.assets[0].uri);
       }
     } catch {
@@ -59,14 +61,14 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.previewCard}>
-          {referenceUri ? (
-            <Image source={{ uri: referenceUri }} style={styles.referenceImage} resizeMode="cover" />
+          {referenceUri && !imageError ? (
+            <Image source={{ uri: referenceUri }} onError={() => setImageError(true)} style={styles.referenceImage} resizeMode="cover" />
           ) : (
             <>
               <View style={styles.previewGlow} />
               <Ionicons name="images-outline" size={40} color={colors.accent} />
-              <Text style={styles.previewTitle}>Your next great photo starts here.</Text>
-              <Text style={styles.previewBody}>Choose a reference pose to begin.</Text>
+              <Text style={styles.previewTitle}>{imageError ? 'Reference photo unavailable.' : 'Your next great photo starts here.'}</Text>
+              <Text style={styles.previewBody}>{imageError ? 'Choose another photo to continue.' : 'Choose a reference pose to begin.'}</Text>
             </>
           )}
         </View>

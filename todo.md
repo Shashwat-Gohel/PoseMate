@@ -38,7 +38,7 @@ This document breaks PoseMate into small, verifiable milestones. Each step shoul
 - [x] The project can be started locally.
 - [ ] The initial app opens without errors.
 - [x] The selected SDK and dependency versions are documented.
-- [ ] A physical-device testing plan is available.
+- [x] A physical-device testing plan is available.
 
 ### Milestone
 
@@ -146,12 +146,12 @@ The user can open PoseMate and understand how to begin.
 - [x] Install and configure the compatible Expo image-picker package.
 - [x] Request photo-library permission only when the user starts photo selection.
 - [x] Explain why photo access is needed when required.
-- [ ] Handle permission granted state.
+- [x] Handle permission granted state.
 - [x] Handle permission denied state.
 - [x] Handle limited photo-library access where supported.
 - [x] Handle user cancellation without showing an error.
 - [x] Restrict selection to a single image for the MVP.
-- [ ] Support common image formats returned by the native picker.
+- [x] Support common image formats returned by the native picker.
 - [x] Store the selected image URI in app state.
 - [x] Display the selected reference image on the home screen.
 - [x] Add a replace-reference action.
@@ -690,6 +690,7 @@ Use this section to record implementation progress, test devices, blockers, and 
 - Phase 1 implementation is complete; device/UI verification remains pending.
 - Phase 2 implementation is complete; device/layout verification remains pending.
 - Phase 3 implementation is complete; native picker verification remains pending.
+- Phase 1–3 audit completed; remaining unchecked items are UI/device verification tasks requiring Expo Go, a simulator, or a physical iPhone.
 - Expo Metro bundler starts successfully with telemetry disabled in this restricted environment.
 - Expo reported compatibility notices for several package patch versions; these should be aligned before device testing.
 - Camera and image-picker integrations are intentionally not implemented until the foundation is verified.
