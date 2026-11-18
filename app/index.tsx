@@ -59,7 +59,7 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.actions}>
-          <Pressable style={styles.primaryButton} onPress={() => router.push('/camera')}>
+          <Pressable style={styles.primaryButton} onPress={() => router.push({ pathname: '/camera', params: referenceUri ? { referenceUri } : undefined })}>
             <Ionicons name="camera-outline" size={22} color={colors.background} />
             <Text style={styles.primaryLabel}>Start Shooting</Text>
             <Ionicons name="arrow-forward" size={19} color={colors.background} />

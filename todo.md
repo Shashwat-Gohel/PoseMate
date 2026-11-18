@@ -220,13 +220,13 @@ The user can open a stable live camera preview.
 ### Tasks
 
 - [ ] Render the camera as the background layer.
-- [ ] Render the reference image as a separate UI layer above the camera.
-- [ ] Ensure the overlay does not modify the camera component itself.
-- [ ] Preserve the reference image aspect ratio.
-- [ ] Add a default overlay size.
-- [ ] Add a default centered overlay position.
-- [ ] Add a default opacity value.
-- [ ] Add a visible but unobtrusive overlay boundary or handle design if needed.
+- [x] Render the reference image as a separate UI layer above the camera.
+- [x] Ensure the overlay does not modify the camera component itself.
+- [x] Preserve the reference image aspect ratio.
+- [x] Add a default overlay size.
+- [x] Add a default centered overlay position.
+- [x] Add a default opacity value.
+- [x] Add a visible but unobtrusive overlay boundary or handle design if needed.
 - [ ] Ensure camera controls remain visible above or below the overlay as intended.
 - [ ] Ensure the overlay does not block the capture button.
 
@@ -686,6 +686,7 @@ Use this section to record implementation progress, test devices, blockers, and 
 - Dependencies are installed; npm reported 23 audit findings from the dependency tree.
 - Native image picker integration is implemented and TypeScript validation passes.
 - Native camera preview integration is implemented and TypeScript validation passes.
+- Reference image is passed into the camera route and rendered as a separate overlay layer.
 - Expo Metro bundler starts successfully with telemetry disabled in this restricted environment.
 - Expo reported compatibility notices for several package patch versions; these should be aligned before device testing.
 - Camera and image-picker integrations are intentionally not implemented until the foundation is verified.

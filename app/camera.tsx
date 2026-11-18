@@ -1,12 +1,14 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
+import { useLocalSearchParams } from 'expo-router';
 import { colors, radii, spacing } from '@/constants/theme';
 
 export default function CameraScreen() {
+  const { referenceUri } = useLocalSearchParams<{ referenceUri?: string }>();
   const [permission, requestPermission] = useCameraPermissions();
   const [facing, setFacing] = useState<'front' | 'back'>('back');
 
@@ -42,6 +44,11 @@ export default function CameraScreen() {
         </View>
         <View style={styles.preview}>
           <CameraView style={StyleSheet.absoluteFill} facing={facing} />
+          {referenceUri ? (
+            <View pointerEvents="none" style={styles.referenceOverlayContainer}>
+              <Image source={{ uri: referenceUri }} style={styles.referenceOverlay} resizeMode="contain" />
+            </View>
+          ) : null}
         </View>
         <View style={styles.bottomBar}>
           <Text style={styles.status}>Reference overlay controls will appear here.</Text>
@@ -60,6 +67,8 @@ const styles = StyleSheet.create({
   title: { color: colors.text, fontSize: 16, fontWeight: '600' },
   controlButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#17191DCC', alignItems: 'center', justifyContent: 'center' },
   preview: { flex: 1, borderRadius: radii.lg, backgroundColor: '#101215', alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
+  referenceOverlayContainer: { ...StyleSheet.absoluteFillObject, alignItems: 'center', justifyContent: 'center' },
+  referenceOverlay: { width: '78%', height: '62%', opacity: 0.55 },
   previewText: { color: colors.text, fontSize: 16, fontWeight: '600', marginTop: spacing.md },
   previewHint: { color: colors.textMuted, fontSize: 13, marginTop: spacing.xs },
   permissionButton: { marginTop: spacing.lg, backgroundColor: colors.accent, paddingHorizontal: spacing.xl, paddingVertical: spacing.md, borderRadius: radii.pill },
