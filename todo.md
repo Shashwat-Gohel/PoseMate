@@ -182,15 +182,15 @@ The user can reliably choose and manage a reference image.
 
 ### Tasks
 
-- [ ] Install and configure the compatible Expo camera package.
-- [ ] Request camera permission when entering the camera flow.
-- [ ] Handle camera permission denial.
-- [ ] Add a camera permission recovery path.
-- [ ] Render the live camera preview full-screen or within the intended layout.
+- [x] Install and configure the compatible Expo camera package.
+- [x] Request camera permission when entering the camera flow.
+- [x] Handle camera permission denial.
+- [x] Add a camera permission recovery path.
+- [x] Render the live camera preview full-screen or within the intended layout.
 - [ ] Add a close/back button.
-- [ ] Add front-camera and rear-camera switching.
+- [x] Add front-camera and rear-camera switching.
 - [ ] Preserve the selected reference image while opening the camera.
-- [ ] Add a camera-loading state.
+- [x] Add a camera-loading state.
 - [ ] Handle camera initialization failures gracefully.
 - [ ] Add flash control only if supported reliably by the selected camera API.
 - [ ] Add a large capture button placeholder.
@@ -685,6 +685,7 @@ Use this section to record implementation progress, test devices, blockers, and 
 
 - Dependencies are installed; npm reported 23 audit findings from the dependency tree.
 - Native image picker integration is implemented and TypeScript validation passes.
+- Native camera preview integration is implemented and TypeScript validation passes.
 - Expo Metro bundler starts successfully with telemetry disabled in this restricted environment.
 - Expo reported compatibility notices for several package patch versions; these should be aligned before device testing.
 - Camera and image-picker integrations are intentionally not implemented until the foundation is verified.
