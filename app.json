@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "PoseMate",
+    "slug": "posemate",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "scheme": "posemate",
+    "plugins": ["expo-router"],
+    "ios": {
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSCameraUsageDescription": "PoseMate uses the camera to help you recreate reference poses.",
+        "NSPhotoLibraryUsageDescription": "PoseMate uses your photo library to select reference poses.",
+        "NSPhotoLibraryAddUsageDescription": "PoseMate saves your finished photographs to your photo library."
+      }
+    },
+    "android": {
+      "permissions": ["CAMERA", "READ_MEDIA_IMAGES"]
+    }
+  }
+}
