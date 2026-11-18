@@ -61,11 +61,11 @@ The development environment is ready and the MVP scope is agreed.
 - [x] Create the initial route structure.
 - [x] Create a shared constants folder.
 - [x] Create a shared theme file for colors, spacing, typography, radii, and shadows.
-- [ ] Create reusable button, text, card, icon-button, and screen-container components where useful.
+- [x] Create reusable button, text, card, icon-button, and screen-container components where useful.
 - [x] Add safe-area handling.
-- [ ] Add a basic error boundary or app-level error fallback.
+- [x] Add a basic error boundary or app-level error fallback.
 - [x] Configure the app name and bundle identifiers when appropriate.
-- [ ] Add a README section describing how to run the app.
+- [x] Add a README section describing how to run the app.
 
 ### Suggested structure
 
@@ -671,8 +671,8 @@ Use this section to record implementation progress, test devices, blockers, and 
 ### Current phase
 
 - Phase: 1 — Project Foundation
-- Last completed step: Expo/TypeScript project foundation and initial home/camera routes created
-- Next step: Install dependencies, run the app, and verify the foundation on a simulator or physical iPhone
+- Last completed step: Foundation, shared components, fallback UI, dependency alignment, and documentation completed
+- Next step: Verify the initial app and navigation on a simulator or physical iPhone
 
 ### Decisions and technical notes
 
@@ -687,6 +687,7 @@ Use this section to record implementation progress, test devices, blockers, and 
 - Native image picker integration is implemented and TypeScript validation passes.
 - Native camera preview integration is implemented and TypeScript validation passes.
 - Reference image is passed into the camera route and rendered as a separate overlay layer.
+- Phase 1 implementation is complete; device/UI verification remains pending.
 - Expo Metro bundler starts successfully with telemetry disabled in this restricted environment.
 - Expo reported compatibility notices for several package patch versions; these should be aligned before device testing.
 - Camera and image-picker integrations are intentionally not implemented until the foundation is verified.
