@@ -145,18 +145,18 @@ The user can open PoseMate and understand how to begin.
 
 - [x] Install and configure the compatible Expo image-picker package.
 - [x] Request photo-library permission only when the user starts photo selection.
-- [ ] Explain why photo access is needed when required.
+- [x] Explain why photo access is needed when required.
 - [ ] Handle permission granted state.
 - [x] Handle permission denied state.
-- [ ] Handle limited photo-library access where supported.
+- [x] Handle limited photo-library access where supported.
 - [x] Handle user cancellation without showing an error.
 - [x] Restrict selection to a single image for the MVP.
 - [ ] Support common image formats returned by the native picker.
 - [x] Store the selected image URI in app state.
 - [x] Display the selected reference image on the home screen.
-- [ ] Add a replace-reference action.
-- [ ] Add a remove-reference action.
-- [ ] Add basic image-loading and image-error states.
+- [x] Add a replace-reference action.
+- [x] Add a remove-reference action.
+- [x] Add basic image-loading and image-error states.
 
 ### Verification checklist
 
@@ -670,9 +670,9 @@ Use this section to record implementation progress, test devices, blockers, and 
 
 ### Current phase
 
-- Phase: 2 — Home Screen and Initial User Flow
-- Last completed step: Home, reference selection entry, camera entry, and settings entry implemented
-- Next step: Verify the home flow on a simulator or physical iPhone
+- Phase: 3 — Permissions and Reference Photo Selection
+- Last completed step: Native picker, permission recovery, loading, replace, remove, and error states implemented
+- Next step: Verify photo selection and permission flows on a simulator or physical iPhone
 
 ### Decisions and technical notes
 
@@ -689,6 +689,7 @@ Use this section to record implementation progress, test devices, blockers, and 
 - Reference image is passed into the camera route and rendered as a separate overlay layer.
 - Phase 1 implementation is complete; device/UI verification remains pending.
 - Phase 2 implementation is complete; device/layout verification remains pending.
+- Phase 3 implementation is complete; native picker verification remains pending.
 - Expo Metro bundler starts successfully with telemetry disabled in this restricted environment.
 - Expo reported compatibility notices for several package patch versions; these should be aligned before device testing.
 - Camera and image-picker integrations are intentionally not implemented until the foundation is verified.

@@ -1,4 +1,4 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,19 +8,32 @@ import { colors, radii, spacing } from '@/constants/theme';
 
 export default function HomeScreen() {
   const [referenceUri, setReferenceUri] = useState<string | null>(null);
+  const [isPicking, setIsPicking] = useState(false);
+  const [pickerError, setPickerError] = useState<string | null>(null);
 
   const chooseReferencePhoto = async () => {
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!permission.granted) return;
+    setPickerError(null);
+    setIsPicking(true);
+    try {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permission.granted) {
+        setPickerError('Photo access is needed to choose a reference pose. Enable it in Settings and try again.');
+        return;
+      }
 
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: false,
-      quality: 1,
-    });
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        allowsEditing: false,
+        quality: 1,
+      });
 
-    if (!result.canceled && result.assets[0]?.uri) {
-      setReferenceUri(result.assets[0].uri);
+      if (!result.canceled && result.assets[0]?.uri) {
+        setReferenceUri(result.assets[0].uri);
+      }
+    } catch {
+      setPickerError('We could not open your photo library. Please try again.');
+    } finally {
+      setIsPicking(false);
     }
   };
 
@@ -64,10 +77,17 @@ export default function HomeScreen() {
             <Text style={styles.primaryLabel}>Start Shooting</Text>
             <Ionicons name="arrow-forward" size={19} color={colors.background} />
           </Pressable>
-          <Pressable style={styles.secondaryButton} onPress={chooseReferencePhoto}>
-            <Ionicons name="image-outline" size={20} color={colors.accent} />
-            <Text style={styles.secondaryLabel}>Choose Reference Photo</Text>
+          <Pressable style={styles.secondaryButton} onPress={chooseReferencePhoto} disabled={isPicking}>
+            {isPicking ? <ActivityIndicator color={colors.accent} /> : <Ionicons name="image-outline" size={20} color={colors.accent} />}
+            <Text style={styles.secondaryLabel}>{referenceUri ? 'Replace Reference Photo' : 'Choose Reference Photo'}</Text>
           </Pressable>
+          {referenceUri ? (
+            <Pressable style={styles.removeButton} onPress={() => setReferenceUri(null)}>
+              <Ionicons name="trash-outline" size={17} color={colors.textMuted} />
+              <Text style={styles.removeLabel}>Remove reference</Text>
+            </Pressable>
+          ) : null}
+          {pickerError ? <Text style={styles.errorText}>{pickerError}</Text> : null}
         </View>
 
         <View style={styles.footer}>
@@ -116,6 +136,9 @@ const styles = StyleSheet.create({
   primaryLabel: { flex: 1, color: colors.background, fontSize: 16, fontWeight: '700' },
   secondaryButton: { height: 52, borderRadius: radii.md, borderWidth: 1, borderColor: colors.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
   secondaryLabel: { color: colors.text, fontSize: 14, fontWeight: '600' },
+  removeButton: { alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: spacing.xs, padding: spacing.sm },
+  removeLabel: { color: colors.textMuted, fontSize: 13 },
+  errorText: { color: '#E89B8F', fontSize: 12, lineHeight: 18, textAlign: 'center', marginTop: spacing.sm },
   footer: { marginTop: spacing.xl },
   footerLabel: { color: colors.textSubtle, fontSize: 11, fontWeight: '700', letterSpacing: 1.5 },
   emptyText: { color: colors.textSubtle, fontSize: 13, marginTop: spacing.sm },
