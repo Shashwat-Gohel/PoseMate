@@ -73,7 +73,7 @@
 
 ## Task 2 — Splash Screen
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🔴 BLOCKER  
 **Files to change:** `app.json`, `assets/splash-icon.png`, `app/_layout.tsx`  
 **No new packages needed** — `expo-splash-screen` is already a dependency of Expo Router.
