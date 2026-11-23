@@ -10,6 +10,7 @@ export function AppButton({ label, variant = 'primary', ...props }: AppButtonPro
   return (
     <Pressable
       {...props}
+      accessibilityLabel={props.accessibilityLabel ?? label}
       style={({ pressed }) => [styles.base, variant === 'secondary' ? styles.secondary : styles.primary, pressed && styles.pressed]}
     >
       <Text style={variant === 'secondary' ? styles.secondaryLabel : styles.primaryLabel}>{label}</Text>

@@ -7,7 +7,9 @@ export default function RootLayout() {
     <>
       <StatusBar style="light" />
       <AppErrorBoundary>
-        <Stack screenOptions={{ headerShown: false, animation: 'fade' }} />
+        <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
+          <Stack.Screen name="camera" options={{ gestureEnabled: false }} />
+        </Stack>
       </AppErrorBoundary>
     </>
   );

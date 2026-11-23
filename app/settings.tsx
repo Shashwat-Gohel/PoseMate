@@ -18,7 +18,7 @@ export default function SettingsScreen() {
         <View style={styles.card}>
           <Ionicons name="sparkles-outline" size={30} color={colors.accent} />
           <Text style={styles.cardTitle}>PoseMate preferences</Text>
-          <Text style={styles.cardBody}>More controls for your shooting experience will be added here.</Text>
+          <Text style={styles.cardBody}>PoseMate keeps your references and finished photos on your device. Camera and photo access are requested only when needed.</Text>
         </View>
         <Text style={styles.version}>PoseMate MVP · Version 1.0.0</Text>
       </View>

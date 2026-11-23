@@ -1,6 +1,6 @@
 # PoseMate
 
-PoseMate is an Expo and React Native mobile application that helps users recreate photography poses with a reference image over the live camera preview.
+PoseMate is an Expo SDK 58 and React Native mobile application that helps users recreate photography poses with a reference image over the live camera preview.
 
 ## MVP workflow
 
@@ -18,6 +18,29 @@ npm start
 ```
 
 Use Expo Go where supported, or a development build for native camera testing. Camera and photo-library behavior must be verified on a physical iPhone.
+
+## iOS release builds
+
+The configured iOS bundle identifier is `com.posemate.app`. Install EAS CLI and authenticate before building:
+
+```bash
+npm install --global eas-cli
+eas login
+eas build:configure
+eas build --platform ios --profile development
+eas build --platform ios --profile preview
+eas build --platform ios --profile production
+eas submit --platform ios --profile production
+```
+
+The development profile creates an internal development build, while preview creates an internal distribution build. Test camera permissions, reference selection, overlay controls, capture, and gallery saving in the standalone build before submitting.
+
+## Known release limitations
+
+- A physical iPhone and Apple Developer account are required for standalone iOS builds.
+- Camera, gallery, flash, and photo-saving behavior cannot be fully validated in a web browser or simulator.
+- App icon and splash artwork still need final branded PNG assets before App Store submission.
+- Core capture works offline and does not require an account, backend, API key, or network connection.
 
 ## Project structure
 

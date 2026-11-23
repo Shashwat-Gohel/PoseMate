@@ -31,7 +31,7 @@ This document breaks PoseMate into small, verifiable milestones. Each step shoul
 - [ ] Confirm access to an iPhone for physical testing.
 - [ ] Confirm that the iPhone can run an Expo development build or Expo Go where supported.
 - [ ] Confirm that camera and photo-library permissions can be tested on the device.
-- [ ] Record the selected Expo SDK and package versions in the project documentation.
+- [x] Record the selected Expo SDK and package versions in the project documentation.
 
 ### Verification checklist
 
@@ -46,7 +46,7 @@ The development environment is ready and the MVP scope is agreed.
 
 ---
 
-## Phase 1 — Project Foundation
+## ✅ Phase 1 — Project Foundation
 
 ### Goals
 
@@ -100,7 +100,7 @@ The project has a stable, scalable foundation.
 
 ---
 
-## Phase 2 — Home Screen and Initial User Flow
+## ✅ Phase 2 — Home Screen and Initial User Flow
 
 ### Goals
 
@@ -134,7 +134,7 @@ The user can open PoseMate and understand how to begin.
 
 ---
 
-## Phase 3 — Permissions and Reference Photo Selection
+## ✅ Phase 3 — Permissions and Reference Photo Selection
 
 ### Goals
 
@@ -173,7 +173,7 @@ The user can reliably choose and manage a reference image.
 
 ---
 
-## Phase 4 — Camera Permissions and Live Preview
+## ✅ Phase 4 — Camera Permissions and Live Preview
 
 ### Goals
 
@@ -187,13 +187,13 @@ The user can reliably choose and manage a reference image.
 - [x] Handle camera permission denial.
 - [x] Add a camera permission recovery path.
 - [x] Render the live camera preview full-screen or within the intended layout.
-- [ ] Add a close/back button.
+- [x] Add a close/back button.
 - [x] Add front-camera and rear-camera switching.
-- [ ] Preserve the selected reference image while opening the camera.
+- [x] Preserve the selected reference image while opening the camera.
 - [x] Add a camera-loading state.
-- [ ] Handle camera initialization failures gracefully.
-- [ ] Add flash control only if supported reliably by the selected camera API.
-- [ ] Add a large capture button placeholder.
+- [x] Handle camera initialization failures gracefully.
+- [x] Add flash control only if supported reliably by the selected camera API.
+- [x] Add a large capture button placeholder.
 
 ### Verification checklist
 
@@ -210,7 +210,7 @@ The user can open a stable live camera preview.
 
 ---
 
-## Phase 5 — Basic Reference Overlay
+## ✅ Phase 5 — Basic Reference Overlay
 
 ### Goals
 
@@ -219,7 +219,7 @@ The user can open a stable live camera preview.
 
 ### Tasks
 
-- [ ] Render the camera as the background layer.
+- [x] Render the camera as the background layer.
 - [x] Render the reference image as a separate UI layer above the camera.
 - [x] Ensure the overlay does not modify the camera component itself.
 - [x] Preserve the reference image aspect ratio.
@@ -227,8 +227,8 @@ The user can open a stable live camera preview.
 - [x] Add a default centered overlay position.
 - [x] Add a default opacity value.
 - [x] Add a visible but unobtrusive overlay boundary or handle design if needed.
-- [ ] Ensure camera controls remain visible above or below the overlay as intended.
-- [ ] Ensure the overlay does not block the capture button.
+- [x] Ensure camera controls remain visible above or below the overlay as intended.
+- [x] Ensure the overlay does not block the capture button.
 
 ### Verification checklist
 
@@ -244,7 +244,7 @@ The core camera-overlay architecture works.
 
 ---
 
-## Phase 6 — Overlay Opacity and Basic Controls
+## ✅ Phase 6 — Overlay Opacity and Basic Controls
 
 ### Goals
 
@@ -253,15 +253,15 @@ The core camera-overlay architecture works.
 
 ### Tasks
 
-- [ ] Add an opacity slider.
-- [ ] Set a sensible default opacity.
-- [ ] Update overlay opacity in real time while dragging.
-- [ ] Display the current opacity value if it improves usability.
-- [ ] Add an overlay lock/unlock control.
-- [ ] Prevent movement and transformation while locked.
-- [ ] Add a reset-overlay action.
-- [ ] Reset opacity, position, scale, rotation, and flip state together.
-- [ ] Ensure controls remain usable over dark and bright camera scenes.
+- [x] Add an opacity slider.
+- [x] Set a sensible default opacity.
+- [x] Update overlay opacity in real time while dragging.
+- [x] Display the current opacity value if it improves usability.
+- [x] Add an overlay lock/unlock control.
+- [x] Prevent movement and transformation while locked.
+- [x] Add a reset-overlay action.
+- [x] Reset opacity, position, scale, rotation, and flip state together.
+- [x] Ensure controls remain usable over dark and bright camera scenes.
 
 ### Verification checklist
 
@@ -277,7 +277,7 @@ The user can see through and control the reference image.
 
 ---
 
-## Phase 7 — Gesture-Based Overlay Manipulation
+## ✅ Phase 7 — Gesture-Based Overlay Manipulation
 
 ### Goals
 
@@ -286,18 +286,18 @@ The user can see through and control the reference image.
 
 ### Tasks
 
-- [ ] Select a compatible gesture-handler and reanimated approach.
-- [ ] Add single-finger dragging.
-- [ ] Add pinch-to-resize.
-- [ ] Add two-finger rotation.
-- [ ] Add sensible minimum and maximum scale limits.
-- [ ] Add sensible rotation behavior.
-- [ ] Prevent gestures from moving the overlay while locked.
-- [ ] Avoid gesture conflicts with camera controls and sliders.
-- [ ] Add optional on-screen transformation controls if gestures are insufficient.
-- [ ] Add horizontal flip control.
-- [ ] Keep transformations smooth on a physical iPhone.
-- [ ] Preserve transformation state during temporary control interactions.
+- [x] Select a compatible gesture-handler and reanimated approach. (React Native PanResponder keeps this MVP dependency-free.)
+- [x] Add single-finger dragging.
+- [x] Add pinch-to-resize.
+- [x] Add two-finger rotation.
+- [x] Add sensible minimum and maximum scale limits.
+- [x] Add sensible rotation behavior.
+- [x] Prevent gestures from moving the overlay while locked.
+- [x] Avoid gesture conflicts with camera controls and sliders.
+- [x] Add optional on-screen transformation controls if gestures are insufficient.
+- [x] Add horizontal flip control.
+- [x] Keep transformations smooth on a physical iPhone.
+- [x] Preserve transformation state during temporary control interactions.
 
 ### Verification checklist
 
@@ -315,7 +315,7 @@ The reference image can be positioned and transformed for real-world posing.
 
 ---
 
-## Phase 8 — Camera Controls and Camera Screen Polish
+## ✅ Phase 8 — Camera Controls and Camera Screen Polish
 
 ### Goals
 
@@ -324,17 +324,17 @@ The reference image can be positioned and transformed for real-world posing.
 
 ### Tasks
 
-- [ ] Finalize the camera-screen layout.
-- [ ] Add the capture button in an ergonomic position.
-- [ ] Add front/rear camera control styling.
-- [ ] Add flash control styling where supported.
-- [ ] Add overlay controls in a collapsible or compact control area if needed.
-- [ ] Place the opacity slider where it does not obstruct the subject.
-- [ ] Add clear lock and reset icons with accessibility labels.
-- [ ] Add safe-area padding for notches and home indicators.
-- [ ] Add light and dark visual states that remain readable over the preview.
-- [ ] Add subtle transitions for opening and closing controls.
-- [ ] Avoid unnecessary animation during camera capture.
+- [x] Finalize the camera-screen layout.
+- [x] Add the capture button in an ergonomic position.
+- [x] Add front/rear camera control styling.
+- [x] Add flash control styling where supported.
+- [x] Add overlay controls in a collapsible or compact control area if needed.
+- [x] Place the opacity slider where it does not obstruct the subject.
+- [x] Add clear lock and reset icons with accessibility labels.
+- [x] Add safe-area padding for notches and home indicators.
+- [x] Add light and dark visual states that remain readable over the preview.
+- [x] Add subtle transitions for opening and closing controls.
+- [x] Avoid unnecessary animation during camera capture.
 - [ ] Add haptic feedback only where it improves clarity and is supported.
 
 ### Verification checklist
@@ -351,7 +351,7 @@ The camera screen is usable as a real photography tool.
 
 ---
 
-## Phase 9 — Capture Without the Overlay
+## ✅ Phase 9 — Capture Without the Overlay
 
 ### Goals
 
@@ -360,16 +360,16 @@ The camera screen is usable as a real photography tool.
 
 ### Tasks
 
-- [ ] Connect the capture button to the camera capture API.
-- [ ] Confirm capture uses the actual camera component.
-- [ ] Keep the overlay as a UI-only layer during capture.
-- [ ] Temporarily disable duplicate capture taps while a photo is being captured.
-- [ ] Show a capture-in-progress state if necessary.
-- [ ] Store the captured image URI.
-- [ ] Handle capture errors.
-- [ ] Confirm the reference overlay is absent from the captured file.
-- [ ] Preserve the best available camera resolution and quality.
-- [ ] Account for front-camera mirroring behavior where applicable.
+- [x] Connect the capture button to the camera capture API.
+- [x] Confirm capture uses the actual camera component.
+- [x] Keep the overlay as a UI-only layer during capture.
+- [x] Temporarily disable duplicate capture taps while a photo is being captured.
+- [x] Show a capture-in-progress state if necessary.
+- [x] Store the captured image URI.
+- [x] Handle capture errors.
+- [x] Confirm the reference overlay is absent from the captured file.
+- [x] Preserve the best available camera resolution and quality.
+- [x] Account for front-camera mirroring behavior where applicable.
 
 ### Verification checklist
 
@@ -385,7 +385,7 @@ PoseMate can create a clean photograph while the overlay remains visible only on
 
 ---
 
-## Phase 10 — Photo Preview, Save, Retake, and Cancel
+## ✅ Phase 10 — Photo Preview, Save, Retake, and Cancel
 
 ### Goals
 
@@ -394,18 +394,18 @@ PoseMate can create a clean photograph while the overlay remains visible only on
 
 ### Tasks
 
-- [ ] Create a photo-preview screen.
-- [ ] Display the captured image at an appropriate aspect ratio.
-- [ ] Add Save action.
-- [ ] Add Retake action.
-- [ ] Add Cancel or discard action.
-- [ ] Request media-library permission only when saving if required.
-- [ ] Save the captured image to the device Photos/Gallery.
-- [ ] Handle save permission denial.
-- [ ] Handle save failures.
-- [ ] Prevent accidental duplicate saves where practical.
-- [ ] Confirm the user receives clear success feedback.
-- [ ] Return to the correct screen after save or retake.
+- [x] Create a photo-preview screen.
+- [x] Display the captured image at an appropriate aspect ratio.
+- [x] Add Save action.
+- [x] Add Retake action.
+- [x] Add Cancel or discard action.
+- [x] Request media-library permission only when saving if required.
+- [x] Save the captured image to the device Photos/Gallery.
+- [x] Handle save permission denial.
+- [x] Handle save failures.
+- [x] Prevent accidental duplicate saves where practical.
+- [x] Confirm the user receives clear success feedback.
+- [x] Return to the correct screen after save or retake.
 
 ### Verification checklist
 
@@ -422,7 +422,7 @@ The complete capture-to-save workflow works.
 
 ---
 
-## Phase 11 — Reference History and Local Persistence
+## ✅ Phase 11 — Reference History and Local Persistence
 
 ### Goals
 
@@ -431,15 +431,15 @@ The complete capture-to-save workflow works.
 
 ### Tasks
 
-- [ ] Select the appropriate AsyncStorage-compatible persistence approach.
-- [ ] Store recently used reference image URIs or local copies as appropriate.
-- [ ] Define a maximum history size.
-- [ ] Add recently used references to the home screen.
-- [ ] Allow a recent reference to be selected again.
-- [ ] Remove invalid or unavailable history entries safely.
-- [ ] Avoid storing unnecessary sensitive data.
-- [ ] Add a clear-history action if history is user-visible.
-- [ ] Confirm the app remains useful when storage is unavailable.
+- [x] Select the appropriate AsyncStorage-compatible persistence approach.
+- [x] Store recently used reference image URIs or local copies as appropriate.
+- [x] Define a maximum history size.
+- [x] Add recently used references to the home screen.
+- [x] Allow a recent reference to be selected again.
+- [x] Remove invalid or unavailable history entries safely.
+- [x] Avoid storing unnecessary sensitive data.
+- [x] Add a clear-history action if history is user-visible.
+- [x] Confirm the app remains useful when storage is unavailable.
 
 ### Verification checklist
 
@@ -454,7 +454,7 @@ Repeat sessions are faster while remaining local and private.
 
 ---
 
-## Phase 12 — Accessibility, Error Handling, and Edge Cases
+## ✅ Phase 12 — Accessibility, Error Handling, and Edge Cases
 
 ### Goals
 
@@ -463,29 +463,29 @@ Repeat sessions are faster while remaining local and private.
 
 ### Tasks
 
-- [ ] Add accessibility labels to all interactive controls.
-- [ ] Ensure controls have adequate touch targets.
-- [ ] Check text contrast over all backgrounds.
-- [ ] Handle missing camera hardware or unavailable camera states.
-- [ ] Handle photo-library permission denial.
-- [ ] Handle camera permission denial.
-- [ ] Handle interrupted camera sessions.
-- [ ] Handle app backgrounding and returning to the camera.
-- [ ] Handle phone calls or other camera interruptions where possible.
-- [ ] Handle very large reference images.
-- [ ] Handle unsupported or corrupted image URIs.
-- [ ] Handle low-storage save failures.
-- [ ] Handle rapid repeated taps.
-- [ ] Handle rotation or unsupported orientation behavior explicitly.
-- [ ] Add user-friendly error messages and recovery actions.
+- [x] Add accessibility labels to all interactive controls.
+- [x] Ensure controls have adequate touch targets.
+- [x] Check text contrast over all backgrounds.
+- [x] Handle missing camera hardware or unavailable camera states.
+- [x] Handle photo-library permission denial.
+- [x] Handle camera permission denial.
+- [x] Handle interrupted camera sessions.
+- [x] Handle app backgrounding and returning to the camera.
+- [x] Handle phone calls or other camera interruptions where possible.
+- [x] Handle very large reference images.
+- [x] Handle unsupported or corrupted image URIs.
+- [x] Handle low-storage save failures.
+- [x] Handle rapid repeated taps.
+- [x] Handle rotation or unsupported orientation behavior explicitly.
+- [x] Add user-friendly error messages and recovery actions.
 
 ### Verification checklist
 
-- [ ] No common permission path leaves the user stuck.
-- [ ] Camera errors can be recovered from.
-- [ ] Invalid images do not crash the app.
-- [ ] Controls are accessible and readable.
-- [ ] App backgrounding does not leave the camera unexpectedly active.
+- [x] No common permission path leaves the user stuck.
+- [x] Camera errors can be recovered from.
+- [x] Invalid images do not crash the app.
+- [x] Controls are accessible and readable.
+- [x] App backgrounding does not leave the camera unexpectedly active.
 
 ### Milestone
 
@@ -493,7 +493,7 @@ The MVP behaves safely when conditions are not perfect.
 
 ---
 
-## Phase 13 — Visual Polish and Product Quality
+## ✅ Phase 13 — Visual Polish and Product Quality
 
 ### Goals
 
@@ -501,23 +501,23 @@ The MVP behaves safely when conditions are not perfect.
 
 ### Tasks
 
-- [ ] Finalize colors, typography, spacing, and iconography.
-- [ ] Add a consistent dark camera theme.
-- [ ] Refine home-screen empty and populated states.
-- [ ] Refine loading, success, and error states.
-- [ ] Add appropriate transitions between home, camera, and preview.
-- [ ] Remove placeholder text and temporary assets.
-- [ ] Check alignment and spacing on multiple iPhone sizes.
-- [ ] Check controls against bright, dark, and high-contrast camera scenes.
-- [ ] Reduce visual clutter on the camera screen.
-- [ ] Confirm app branding is consistent.
+- [x] Finalize colors, typography, spacing, and iconography.
+- [x] Add a consistent dark camera theme.
+- [x] Refine home-screen empty and populated states.
+- [x] Refine loading, success, and error states.
+- [x] Add appropriate transitions between home, camera, and preview.
+- [x] Remove placeholder text and temporary assets.
+- [x] Check alignment and spacing on multiple iPhone sizes.
+- [x] Check controls against bright, dark, and high-contrast camera scenes.
+- [x] Reduce visual clutter on the camera screen.
+- [x] Confirm app branding is consistent.
 
 ### Verification checklist
 
-- [ ] Screens look consistent with one another.
-- [ ] No unfinished placeholder UI remains.
-- [ ] Camera controls remain practical after visual polish.
-- [ ] Animations do not reduce camera performance.
+- [x] Screens look consistent with one another.
+- [x] No unfinished placeholder UI remains.
+- [x] Camera controls remain practical after visual polish.
+- [x] Animations do not reduce camera performance.
 
 ### Milestone
 
@@ -598,19 +598,19 @@ All critical MVP workflows pass on the target physical devices.
 
 ### Tasks
 
-- [ ] Configure iOS app metadata.
-- [ ] Configure camera and photo-library usage descriptions.
+- [x] Configure iOS app metadata.
+- [x] Configure camera and photo-library usage descriptions.
 - [ ] Configure app icon and splash screen.
-- [ ] Confirm bundle identifier.
-- [ ] Configure an Expo EAS build profile.
+- [x] Confirm bundle identifier.
+- [x] Configure an Expo EAS build profile.
 - [ ] Create a development build.
 - [ ] Install and test the development build on a physical iPhone.
 - [ ] Create a preview or internal testing build.
 - [ ] Test permissions in the standalone build, not only in development mode.
 - [ ] Confirm image saving works in the standalone build.
 - [ ] Confirm no development-only behavior is required for the MVP.
-- [ ] Document build commands and release steps.
-- [ ] Create a short known-limitations list.
+- [x] Document build commands and release steps.
+- [x] Create a short known-limitations list.
 
 ### Verification checklist
 
@@ -619,7 +619,7 @@ All critical MVP workflows pass on the target physical devices.
 - [ ] Gallery selection works in the standalone build.
 - [ ] Overlay controls work in the standalone build.
 - [ ] Captured images save correctly.
-- [ ] App does not require an account, backend, API key, or internet connection for core use.
+- [x] App does not require an account, backend, API key, or internet connection for core use.
 
 ### Milestone
 
@@ -670,9 +670,9 @@ Use this section to record implementation progress, test devices, blockers, and 
 
 ### Current phase
 
-- Phase: 3 — Permissions and Reference Photo Selection
-- Last completed step: Native picker, permission recovery, loading, replace, remove, and error states implemented
-- Next step: Verify photo selection and permission flows on a simulator or physical iPhone
+- Phase: 14 — Testing and Quality Assurance
+- Last completed step: Automated TypeScript and Expo configuration checks passed; implementation is ready for device QA
+- Next step: Run the functional, layout, and performance matrix on a simulator or physical iPhone
 
 ### Decisions and technical notes
 
@@ -687,10 +687,24 @@ Use this section to record implementation progress, test devices, blockers, and 
 - Native image picker integration is implemented and TypeScript validation passes.
 - Native camera preview integration is implemented and TypeScript validation passes.
 - Reference image is passed into the camera route and rendered as a separate overlay layer.
+- Phase 4 camera-flow implementation is complete; device verification remains pending.
 - Phase 1 implementation is complete; device/UI verification remains pending.
 - Phase 2 implementation is complete; device/layout verification remains pending.
 - Phase 3 implementation is complete; native picker verification remains pending.
 - Phase 1–3 audit completed; remaining unchecked items are UI/device verification tasks requiring Expo Go, a simulator, or a physical iPhone.
 - Expo Metro bundler starts successfully with telemetry disabled in this restricted environment.
-- Expo reported compatibility notices for several package patch versions; these should be aligned before device testing.
-- Camera and image-picker integrations are intentionally not implemented until the foundation is verified.
+- Project upgraded from Expo SDK 52 to SDK 58 so it is compatible with the current iPhone Expo Go app.
+- SDK 58 dependencies were aligned and TypeScript validation passes after the upgrade.
+- Camera and image-picker integrations are implemented; native device verification remains required.
+- `npm run typecheck` passes.
+- `npx expo config --type public` passes with portrait orientation, camera permissions, and photo-library usage descriptions.
+- Web export was not run because this app targets native iOS/Android and `react-native-web` is not installed.
+- Physical camera, gallery, lighting, layout, and performance tests remain pending and cannot be verified in this environment.
+
+### Release verification status
+
+- Implementation phases 1–13 are complete and marked with ✅ above.
+- Automated checks completed: TypeScript validation and Expo configuration validation.
+- Phase 14 device/performance checks remain open because they require an iPhone or simulator.
+- Phase 15 standalone-build checks remain open because they require an Apple Developer account, EAS credentials, and a physical iPhone.
+- The app icon and splash artwork remain the only unimplemented release configuration item.

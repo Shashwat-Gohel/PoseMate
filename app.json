@@ -6,17 +6,41 @@
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
     "scheme": "posemate",
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "PoseMate uses your photo library to select reference poses.",
+          "savePhotosPermission": "PoseMate saves your finished photographs to your photo library."
+        }
+      ]
+    ],
     "ios": {
+      "bundleIdentifier": "com.posemate.app",
+      "buildNumber": "1",
       "supportsTablet": false,
       "infoPlist": {
         "NSCameraUsageDescription": "PoseMate uses the camera to help you recreate reference poses.",
         "NSPhotoLibraryUsageDescription": "PoseMate uses your photo library to select reference poses.",
-        "NSPhotoLibraryAddUsageDescription": "PoseMate saves your finished photographs to your photo library."
+        "NSPhotoLibraryAddUsageDescription": "PoseMate saves your finished photographs to your photo library.",
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
-      "permissions": ["CAMERA", "READ_MEDIA_IMAGES"]
+      "permissions": [
+        "CAMERA",
+        "READ_MEDIA_IMAGES",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e2ba3bff-98e3-4ac2-8880-01dc54ba9336"
+      }
     }
   }
 }
