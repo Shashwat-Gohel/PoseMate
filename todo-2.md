@@ -156,7 +156,7 @@ export default function RootLayout() {
 
 ## Task 3 — Privacy Policy Web Page
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🔴 BLOCKER (Apple requires a URL for apps using camera/photos)  
 **Files to change:** None in the app codebase — this is a separate web page.
 

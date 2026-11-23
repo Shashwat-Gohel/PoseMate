@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PoseMate - Privacy Policy</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --card-bg: #1C1C1E;
+      --text: #FFFFFF;
+      --text-muted: #8E8E93;
+      --accent: #FFD60A;
+      --border: #2C2C2E;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .badge {
+      display: inline-block;
+      background-color: rgba(255, 214, 10, 0.15);
+      color: var(--accent);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 214, 10, 0.3);
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .last-updated {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    .section {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    p {
+      color: #EBEBF5;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+    p:last-child {
+      margin-bottom: 0;
+    }
+    ul {
+      margin-left: 20px;
+      margin-bottom: 12px;
+      color: #EBEBF5;
+      font-size: 15px;
+    }
+    li {
+      margin-bottom: 6px;
+    }
+    strong {
+      color: #FFFFFF;
+    }
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge">POSEMATE PRIVACY COMMITMENT</div>
+    <h1>Privacy Policy</h1>
+    <p class="last-updated">Effective Date: November 2026</p>
+
+    <div class="section">
+      <h2>1. Introduction</h2>
+      <p>PoseMate ("we", "our", or "the app") is a privacy-first camera overlay application built for photographers and creators. We believe your creative process and photos belong exclusively to you. <strong>PoseMate does not collect, transmit, store, or sell any personal data or images.</strong></p>
+    </div>
+
+    <div class="section">
+      <h2>2. Fully Offline Architecture</h2>
+      <p>PoseMate operates entirely on-device and does not require an account, login, or internet connectivity to function:</p>
+      <ul>
+        <li>No user tracking, profiling, or telemetry SDKs.</li>
+        <li>No third-party analytics (e.g., Google Analytics, Meta Pixel).</li>
+        <li>No cloud image syncing or external servers.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>3. Device Permissions & How They Are Used</h2>
+      <p>PoseMate requests only the permissions strictly required to perform its core photography workflow:</p>
+      <ul>
+        <li><strong>Camera (<code>NSCameraUsageDescription</code>):</strong> Used solely to display the live camera viewfinder and capture photographs. Camera frames are processed on-device in real time and are never recorded or streamed.</li>
+        <li><strong>Photo Library Read Access (<code>NSPhotoLibraryUsageDescription</code>):</strong> Used only when you tap "Choose from Photos" to select a reference pose image to superimpose over your camera.</li>
+        <li><strong>Photo Library Write Access (<code>NSPhotoLibraryAddUsageDescription</code>):</strong> Used exclusively when you tap "Save Photo" to save your clean, captured image to your device camera roll.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>4. Local Storage</h2>
+      <p>The app uses local device storage (AsyncStorage) solely to store:</p>
+      <ul>
+        <li>Local file references (URIs) of up to 5 recently selected reference images for convenient switching.</li>
+        <li>Basic on-device user preferences (e.g., onboarding dismissal flag).</li>
+      </ul>
+      <p>This data remains on your physical device at all times and can be deleted simply by clearing recent references or uninstalling the app.</p>
+    </div>
+
+    <div class="section">
+      <h2>5. Children's Privacy</h2>
+      <p>Because PoseMate collects no personal information whatsoever, it is fully compliant with COPPA and does not knowingly collect information from children of any age.</p>
+    </div>
+
+    <div class="section">
+      <h2>6. Contact Us</h2>
+      <p>If you have any questions or feedback regarding this Privacy Policy or PoseMate, please open an issue on our GitHub repository or contact the project maintainers directly.</p>
+    </div>
+
+    <footer>
+      &copy; 2026 PoseMate. Designed for iOS & Android. All rights reserved.
+    </footer>
+  </div>
+</body>
+</html>
