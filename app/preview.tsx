@@ -39,8 +39,8 @@ export default function PreviewScreen() {
   if (!capturedUri) {
     return (
       <SafeAreaView style={styles.centered}>
-        <Text style={styles.title}>Photo unavailable</Text>
-        <Pressable style={styles.primaryButton} onPress={() => router.replace('/')}><Text style={styles.primaryLabel}>Return home</Text></Pressable>
+        <Text style={styles.emptyTitle}>Photo unavailable</Text>
+        <Pressable style={styles.saveButton} onPress={() => router.replace('/')}><Text style={styles.saveButtonText}>Return to Camera</Text></Pressable>
       </SafeAreaView>
     );
   }
@@ -48,26 +48,47 @@ export default function PreviewScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Pressable accessibilityLabel="Cancel and discard photo" style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]} onPress={() => router.replace('/')}>
-            <Ionicons name="close" size={24} color={colors.text} />
+        {/* iOS Navigation Bar */}
+        <View style={styles.iosNavBar}>
+          <Pressable accessibilityLabel="Discard and return" style={({ pressed }) => [styles.navActionButton, pressed && styles.pressed]} onPress={() => router.replace('/')}>
+            <Ionicons name="close" size={24} color="#FFFFFF" />
           </Pressable>
-          <View style={styles.titleBlock}><Text style={styles.title}>Your shot</Text><Text style={styles.subtitle}>Clean capture · overlay excluded</Text></View>
-          <View style={styles.iconButton} />
+          <View style={styles.navTitleCenter}>
+            <Text style={styles.navTitle}>Photo Preview</Text>
+            <Text style={styles.navSubtitle}>ORIGINAL CAPTURE</Text>
+          </View>
+          <View style={styles.navPlaceholder} />
         </View>
-        <View style={styles.imageFrame}>
+
+        {/* Photo Viewport */}
+        <View style={styles.photoViewport}>
           <Image source={{ uri: capturedUri }} style={styles.image} resizeMode="contain" />
         </View>
-        {error ? <Text style={styles.error}>{error}</Text> : null}
-        {saved ? <Text style={styles.success}>Saved to your Photos.</Text> : null}
-        <View style={styles.actions}>
-          <Pressable accessibilityLabel="Retake photo" style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]} onPress={() => router.back()} disabled={isSaving}>
-            <Ionicons name="camera-outline" size={20} color={colors.accent} />
-            <Text style={styles.secondaryLabel}>Retake</Text>
+
+        {error ? (
+          <View style={styles.errorPill}>
+            <Ionicons name="alert-circle" size={17} color={colors.danger} />
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        ) : null}
+
+        {saved ? (
+          <View style={styles.successPill}>
+            <Ionicons name="checkmark-circle" size={17} color={colors.success} />
+            <Text style={styles.successText}>Saved to Photos</Text>
+          </View>
+        ) : null}
+
+        {/* iOS Bottom Action Deck */}
+        <View style={styles.bottomDock}>
+          <Pressable accessibilityLabel="Retake Photo" style={({ pressed }) => [styles.retakeButton, pressed && styles.pressed]} onPress={() => router.back()} disabled={isSaving}>
+            <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
+            <Text style={styles.retakeButtonText}>Retake</Text>
           </Pressable>
-          <Pressable accessibilityLabel="Save photo" style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed, (isSaving || saved) && styles.disabled]} onPress={savePhoto} disabled={isSaving || saved}>
-            {isSaving ? <ActivityIndicator color={colors.background} /> : <Ionicons name="download-outline" size={20} color={colors.background} />}
-            <Text style={styles.primaryLabel}>{saved ? 'Saved' : 'Save to Photos'}</Text>
+
+          <Pressable accessibilityLabel="Save to Photos" style={({ pressed }) => [styles.saveButton, (isSaving || saved) && styles.disabled, pressed && styles.pressed]} onPress={savePhoto} disabled={isSaving || saved}>
+            {isSaving ? <ActivityIndicator size="small" color="#000000" /> : <Ionicons name={saved ? "checkmark" : "download-outline"} size={19} color="#000000" />}
+            <Text style={styles.saveButtonText}>{saved ? 'Saved' : 'Save Photo'}</Text>
           </Pressable>
         </View>
       </View>
@@ -76,23 +97,96 @@ export default function PreviewScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: colors.background },
-  centered: { flex: 1, backgroundColor: colors.background, alignItems: 'center', justifyContent: 'center', padding: spacing.xl, gap: spacing.lg },
-  container: { flex: 1, paddingHorizontal: spacing.lg },
-  header: { height: 64, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  iconButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center' },
-  titleBlock: { flex: 1, alignItems: 'center' },
-  title: { color: colors.text, ...typography.title },
-  subtitle: { color: colors.textSubtle, ...typography.caption, marginTop: 2 },
-  imageFrame: { flex: 1, marginVertical: spacing.lg, borderRadius: radii.lg, backgroundColor: colors.surface, overflow: 'hidden', borderWidth: 1, borderColor: colors.border, shadowColor: '#000', shadowOpacity: 0.3, shadowRadius: 22, shadowOffset: { width: 0, height: 10 }, elevation: 5 },
+  safeArea: { flex: 1, backgroundColor: '#000000' },
+  centered: { flex: 1, backgroundColor: '#000000', alignItems: 'center', justifyContent: 'center', padding: spacing.xl, gap: spacing.lg },
+  emptyTitle: { color: colors.text, fontSize: 17, fontWeight: '600' },
+  container: { flex: 1, paddingHorizontal: spacing.md, paddingBottom: spacing.lg },
+
+  iosNavBar: {
+    height: 54,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 4,
+  },
+  navActionButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(44, 44, 46, 0.7)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navTitleCenter: { alignItems: 'center' },
+  navTitle: { color: colors.text, fontSize: 17, fontWeight: '600', letterSpacing: -0.3 },
+  navSubtitle: { color: colors.accent, fontSize: 9.5, fontWeight: '700', letterSpacing: 0.8, marginTop: 1 },
+  navPlaceholder: { width: 36 },
+  pressed: { opacity: 0.7 },
+
+  photoViewport: {
+    flex: 1,
+    borderRadius: 24,
+    backgroundColor: '#0A0A0A',
+    overflow: 'hidden',
+    marginVertical: spacing.sm,
+  },
   image: { width: '100%', height: '100%' },
-  actions: { gap: spacing.sm, paddingBottom: spacing.md },
-  primaryButton: { minHeight: 54, borderRadius: radii.md, backgroundColor: colors.accent, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
-  primaryLabel: { color: colors.background, fontSize: 15, fontWeight: '700' },
-  secondaryButton: { minHeight: 50, borderRadius: radii.md, borderWidth: 1, borderColor: colors.border, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
-  secondaryLabel: { color: colors.text, fontSize: 15, fontWeight: '600' },
-  disabled: { opacity: 0.55 },
-  pressed: { opacity: 0.72 },
-  error: { color: '#E89B8F', textAlign: 'center', fontSize: 13, lineHeight: 19, marginBottom: spacing.sm },
-  success: { color: '#B7E6C1', textAlign: 'center', fontSize: 13, marginBottom: spacing.sm },
+
+  errorPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(255, 59, 48, 0.15)',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: radii.pill,
+    marginBottom: spacing.sm,
+  },
+  errorText: { color: colors.danger, fontSize: 13, fontWeight: '500' },
+
+  successPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(52, 199, 89, 0.15)',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: radii.pill,
+    marginBottom: spacing.sm,
+  },
+  successText: { color: colors.success, fontSize: 13, fontWeight: '600' },
+
+  bottomDock: {
+    flexDirection: 'row',
+    gap: spacing.md,
+    paddingTop: spacing.xs,
+  },
+  retakeButton: {
+    flex: 1,
+    height: 52,
+    borderRadius: radii.lg,
+    backgroundColor: '#1C1C1E',
+    borderWidth: 1,
+    borderColor: '#2C2C2E',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  retakeButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '600' },
+
+  saveButton: {
+    flex: 1.5,
+    height: 52,
+    borderRadius: radii.lg,
+    backgroundColor: colors.accent,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  saveButtonText: { color: '#000000', fontSize: 16, fontWeight: '700' },
+  disabled: { opacity: 0.6 },
 });

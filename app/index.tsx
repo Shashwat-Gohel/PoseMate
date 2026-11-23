@@ -76,76 +76,109 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <View style={styles.logoMark}>
-            <Ionicons name="aperture-outline" size={22} color={colors.accent} />
+        {/* iOS Navigation Header */}
+        <View style={styles.navBar}>
+          <View style={styles.appBrand}>
+            <View style={styles.appIconPill}>
+              <Ionicons name="camera" size={17} color={colors.accent} />
+            </View>
+            <View>
+              <Text style={styles.appTitle}>PoseMate</Text>
+              <Text style={styles.appSubtitle}>CAMERA OVERLAY STUDIO</Text>
+            </View>
           </View>
-          <View style={styles.brandBlock}><Text style={styles.brand}>PoseMate</Text><Text style={styles.brandTag}>POSE WITH CONFIDENCE</Text></View>
-          <Pressable accessibilityLabel="Open settings" style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]} onPress={() => router.push('/settings')}>
-            <Ionicons name="settings-outline" size={21} color={colors.textMuted} />
+          <Pressable accessibilityLabel="Open Settings" style={({ pressed }) => [styles.settingsPill, pressed && styles.pressed]} onPress={() => router.push('/settings')}>
+            <Ionicons name="ellipsis-horizontal-circle-outline" size={26} color={colors.textSecondary} />
           </Pressable>
         </View>
 
-        <View style={styles.hero}>
-          <View style={styles.eyebrowRow}><View style={styles.eyebrowDot} /><Text style={styles.eyebrow}>YOUR POSE, YOUR MOMENT</Text></View>
-          <Text style={styles.title}>Recreate the{`\n`}shot you love.</Text>
-          <Text style={styles.subtitle}>
-            Overlay any reference photo on your camera and find the perfect pose with confidence.
+        {/* Hero Section */}
+        <View style={styles.heroSection}>
+          <Text style={styles.heroTitle}>Recreate poses{`\n`}with precision.</Text>
+          <Text style={styles.heroSubtitle}>
+            Superimpose your inspiration photo directly over your live camera viewfinder to capture the shot you envision.
           </Text>
         </View>
 
-        <View style={[styles.previewCard, referenceUri && !imageError && styles.previewCardSelected]}>
-          {referenceUri && !imageError ? (
-            <>
-            <Image source={{ uri: referenceUri }} onError={() => {
-              setImageError(true);
-              void persistHistory(recentReferences.filter((item) => item !== referenceUri));
-            }} style={styles.referenceImage} resizeMode="cover" />
-            <View style={styles.previewBadge}><Ionicons name="checkmark-circle" size={14} color={colors.accent} /><Text style={styles.previewBadgeText}>Reference ready</Text></View>
-            </>
-          ) : (
-            <>
-              <View style={styles.previewGlow} />
-              <Ionicons name="images-outline" size={40} color={colors.accent} />
-              <Text style={styles.previewTitle}>{imageError ? 'Reference photo unavailable' : 'Your next great photo starts here'}</Text>
-              <Text style={styles.previewBody}>{imageError ? 'Choose another photo to continue.' : 'Choose a reference pose to begin.'}</Text>
-            </>
-          )}
+        {/* Primary Viewfinder Preview Card */}
+        <View style={styles.cardSection}>
+          <View style={[styles.previewFrame, referenceUri && !imageError && styles.previewFrameSelected]}>
+            {referenceUri && !imageError ? (
+              <>
+                <Image source={{ uri: referenceUri }} onError={() => {
+                  setImageError(true);
+                  void persistHistory(recentReferences.filter((item) => item !== referenceUri));
+                }} style={styles.referenceImage} resizeMode="cover" />
+                <View style={styles.gradientScrim} />
+                <View style={styles.activePillBadge}>
+                  <Ionicons name="sparkles" size={13} color={colors.accent} />
+                  <Text style={styles.activePillText}>REFERENCE READY</Text>
+                </View>
+              </>
+            ) : (
+              <View style={styles.emptyCardContainer}>
+                <View style={styles.emptyIconBubble}>
+                  <Ionicons name="images-outline" size={32} color={colors.accent} />
+                </View>
+                <Text style={styles.emptyCardTitle}>{imageError ? 'Reference Unavailable' : 'Choose a Reference Pose'}</Text>
+                <Text style={styles.emptyCardSubtitle}>{imageError ? 'Please select another photo from your camera roll.' : 'Select an image from Photos to align your pose in real-time.'}</Text>
+              </View>
+            )}
+          </View>
         </View>
 
-        <View style={styles.actions}>
-          <Pressable accessibilityLabel="Start shooting" style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]} onPress={() => router.push({ pathname: '/camera', params: referenceUri ? { referenceUri } : undefined })}>
-            <Ionicons name="camera-outline" size={22} color={colors.background} />
-            <Text style={styles.primaryLabel}>{referenceUri ? 'Start aligning' : 'Start shooting'}</Text>
-            <Ionicons name="arrow-forward" size={19} color={colors.background} />
+        {/* iOS Native Button Strip */}
+        <View style={styles.actionStrip}>
+          <Pressable accessibilityLabel="Open camera" style={({ pressed }) => [styles.primaryCtaButton, pressed && styles.pressed]} onPress={() => router.push({ pathname: '/camera', params: referenceUri ? { referenceUri } : undefined })}>
+            <Ionicons name="camera" size={20} color="#000000" />
+            <Text style={styles.primaryCtaText}>{referenceUri ? 'Start Camera Alignment' : 'Open Camera'}</Text>
           </Pressable>
-          <Pressable accessibilityLabel={referenceUri ? 'Replace reference photo' : 'Choose reference photo'} style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]} onPress={chooseReferencePhoto} disabled={isPicking}>
-            {isPicking ? <ActivityIndicator color={colors.accent} /> : <Ionicons name="image-outline" size={20} color={colors.accent} />}
-            <Text style={styles.secondaryLabel}>{referenceUri ? 'Replace Reference Photo' : 'Choose Reference Photo'}</Text>
-          </Pressable>
-          {referenceUri ? (
-            <Pressable accessibilityLabel="Remove reference photo" style={styles.removeButton} onPress={() => setReferenceUri(null)}>
-              <Ionicons name="trash-outline" size={17} color={colors.textMuted} />
-              <Text style={styles.removeLabel}>Remove reference</Text>
+
+          <View style={styles.secondaryButtonRow}>
+            <Pressable accessibilityLabel={referenceUri ? 'Change reference photo' : 'Select reference photo'} style={({ pressed }) => [styles.secondaryCtaButton, pressed && styles.pressed]} onPress={chooseReferencePhoto} disabled={isPicking}>
+              {isPicking ? <ActivityIndicator size="small" color={colors.accent} /> : <Ionicons name="images" size={18} color={colors.accent} />}
+              <Text style={styles.secondaryCtaText}>{referenceUri ? 'Change Reference' : 'Choose from Photos'}</Text>
             </Pressable>
-          ) : null}
+
+            {referenceUri ? (
+              <Pressable accessibilityLabel="Remove reference photo" style={({ pressed }) => [styles.trashCtaButton, pressed && styles.pressed]} onPress={() => setReferenceUri(null)}>
+                <Ionicons name="trash-outline" size={19} color={colors.danger} />
+              </Pressable>
+            ) : null}
+          </View>
+
           {pickerError ? <Text style={styles.errorText}>{pickerError}</Text> : null}
         </View>
 
-        <View style={styles.footer}>
-          <View style={styles.footerHeader}>
-            <Text style={styles.footerLabel}>RECENT REFERENCES</Text>
-            {recentReferences.length ? <Pressable accessibilityLabel="Clear recent references" onPress={() => void persistHistory([])}><Text style={styles.clearLabel}>Clear</Text></Pressable> : null}
+        {/* Recent References Section */}
+        <View style={styles.recentSection}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionHeaderTitle}>RECENT REFERENCES</Text>
+            {recentReferences.length ? (
+              <Pressable accessibilityLabel="Clear all recent references" hitSlop={12} onPress={() => void persistHistory([])}>
+                <Text style={styles.clearButtonText}>Clear</Text>
+              </Pressable>
+            ) : null}
           </View>
+
           {recentReferences.length ? (
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.historyRow}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.recentRow}>
               {recentReferences.map((uri) => (
-                <Pressable key={uri} accessibilityLabel="Use recent reference" style={[styles.historyItem, uri === referenceUri && styles.historyItemSelected]} onPress={() => useReference(uri)}>
-                  <Image source={{ uri }} style={styles.historyImage} onError={() => void persistHistory(recentReferences.filter((item) => item !== uri))} />
+                <Pressable key={uri} accessibilityLabel="Select recent reference" style={({ pressed }) => [styles.recentThumbnail, uri === referenceUri && styles.recentThumbnailSelected, pressed && styles.pressed]} onPress={() => useReference(uri)}>
+                  <Image source={{ uri }} style={styles.thumbnailImage} onError={() => void persistHistory(recentReferences.filter((item) => item !== uri))} />
+                  {uri === referenceUri ? (
+                    <View style={styles.thumbnailActiveBadge}>
+                      <Ionicons name="checkmark" size={11} color="#000000" />
+                    </View>
+                  ) : null}
                 </Pressable>
               ))}
             </ScrollView>
-          ) : <Text style={styles.emptyText}>Your recent poses will appear here.</Text>}
+          ) : (
+            <View style={styles.emptyRecentBox}>
+              <Text style={styles.emptyRecentText}>Photos you import will appear here for fast switching.</Text>
+            </View>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -154,60 +187,155 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: colors.background },
-  container: { flexGrow: 1, paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.xxl },
-  header: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  logoMark: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
+  container: { flexGrow: 1, paddingHorizontal: spacing.lg, paddingBottom: spacing.xxl },
+  navBar: {
+    height: 54,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.xs,
+  },
+  appBrand: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  appIconPill: {
+    width: 36,
+    height: 36,
+    borderRadius: radii.md,
     backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  brandBlock: { flex: 1 },
-  brand: { color: colors.text, fontSize: 19, fontWeight: '700', letterSpacing: 0.2 },
-  brandTag: { color: colors.textSubtle, fontSize: 8, fontWeight: '700', letterSpacing: 1.2, marginTop: 2 },
-  iconButton: { padding: spacing.sm },
+  appTitle: { color: colors.text, fontSize: 18, fontWeight: '700', letterSpacing: -0.3 },
+  appSubtitle: { color: colors.accent, fontSize: 8.5, fontWeight: '700', letterSpacing: 1.1, marginTop: 1 },
+  settingsPill: { padding: 4 },
   pressed: { opacity: 0.72 },
-  hero: { paddingTop: spacing.xxl, paddingBottom: spacing.xl },
-  eyebrowRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: spacing.md },
-  eyebrowDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.accent },
-  eyebrow: { color: colors.accent, ...typography.label },
-  title: { color: colors.text, ...typography.display },
-  subtitle: { color: colors.textMuted, ...typography.body, marginTop: spacing.md, maxWidth: 330 },
-  previewCard: {
-    height: 190,
-    borderRadius: radii.lg,
+
+  heroSection: { paddingTop: spacing.md, paddingBottom: spacing.lg },
+  heroTitle: { color: colors.text, ...typography.display },
+  heroSubtitle: { color: colors.textMuted, ...typography.body, marginTop: spacing.sm, maxWidth: 330, lineHeight: 21 },
+
+  cardSection: { marginBottom: spacing.lg },
+  previewFrame: {
+    height: 220,
+    borderRadius: radii.xl,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    shadowColor: '#000', shadowOpacity: 0.28, shadowRadius: 22, shadowOffset: { width: 0, height: 10 }, elevation: 5,
   },
-  previewCardSelected: { borderColor: colors.accentStrong },
-  previewGlow: { position: 'absolute', width: 160, height: 160, borderRadius: 80, backgroundColor: '#3A2D22', opacity: 0.5 },
-  previewTitle: { color: colors.text, fontSize: 16, fontWeight: '700', marginTop: spacing.md },
-  previewBody: { color: colors.textMuted, ...typography.caption, marginTop: spacing.xs },
+  previewFrameSelected: { borderColor: colors.accent, borderWidth: 1.5 },
   referenceImage: { width: '100%', height: '100%' },
-  previewBadge: { position: 'absolute', left: spacing.md, bottom: spacing.md, flexDirection: 'row', alignItems: 'center', gap: spacing.xs, backgroundColor: '#0C0D0FCC', paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, borderRadius: radii.pill },
-  previewBadgeText: { color: colors.text, fontSize: 12, fontWeight: '600' },
-  actions: { gap: spacing.sm, marginTop: spacing.lg },
-  primaryButton: { height: 58, borderRadius: radii.md, backgroundColor: colors.accent, flexDirection: 'row', alignItems: 'center', paddingHorizontal: spacing.md, gap: spacing.sm, shadowColor: colors.accentStrong, shadowOpacity: 0.18, shadowRadius: 12, shadowOffset: { width: 0, height: 6 }, elevation: 3 },
-  primaryLabel: { flex: 1, color: colors.background, fontSize: 16, fontWeight: '700' },
-  secondaryButton: { height: 52, borderRadius: radii.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
-  secondaryLabel: { color: colors.text, fontSize: 14, fontWeight: '600' },
-  removeButton: { alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: spacing.xs, padding: spacing.sm },
-  removeLabel: { color: colors.textMuted, fontSize: 13 },
-  errorText: { color: '#E89B8F', fontSize: 12, lineHeight: 18, textAlign: 'center', marginTop: spacing.sm },
-  footer: { marginTop: spacing.xl },
-  footerHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  footerLabel: { color: colors.textSubtle, fontSize: 11, fontWeight: '700', letterSpacing: 1.5 },
-  clearLabel: { color: colors.accent, fontSize: 12, fontWeight: '600' },
-  emptyText: { color: colors.textSubtle, fontSize: 13, marginTop: spacing.sm },
-  historyRow: { gap: spacing.sm, paddingTop: spacing.sm, paddingBottom: spacing.xs },
-  historyItem: { width: 58, height: 58, borderRadius: radii.md, overflow: 'hidden', borderWidth: 1, borderColor: colors.border },
-  historyItemSelected: { borderColor: colors.accent, borderWidth: 2 },
-  historyImage: { width: '100%', height: '100%' },
+  gradientScrim: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 70,
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
+  },
+  activePillBadge: {
+    position: 'absolute',
+    left: spacing.md,
+    bottom: spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: 'rgba(28, 28, 30, 0.9)',
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    paddingHorizontal: spacing.sm + 2,
+    paddingVertical: 5,
+    borderRadius: radii.pill,
+  },
+  activePillText: { color: colors.text, fontSize: 11, fontWeight: '700', letterSpacing: 0.6 },
+  emptyCardContainer: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing.lg },
+  emptyIconBubble: {
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: colors.surfaceElevated,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.sm,
+  },
+  emptyCardTitle: { color: colors.text, fontSize: 16, fontWeight: '600', textAlign: 'center' },
+  emptyCardSubtitle: { color: colors.textMuted, fontSize: 13, textAlign: 'center', marginTop: 4, maxWidth: 260, lineHeight: 18 },
+
+  actionStrip: { gap: spacing.sm, marginBottom: spacing.xl },
+  primaryCtaButton: {
+    height: 54,
+    borderRadius: radii.lg,
+    backgroundColor: colors.accent,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
+  },
+  primaryCtaText: { color: '#000000', fontSize: 16, fontWeight: '700', letterSpacing: -0.2 },
+  secondaryButtonRow: { flexDirection: 'row', gap: spacing.sm },
+  secondaryCtaButton: {
+    flex: 1,
+    height: 50,
+    borderRadius: radii.lg,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.sm,
+  },
+  secondaryCtaText: { color: colors.text, fontSize: 15, fontWeight: '600' },
+  trashCtaButton: {
+    width: 50,
+    height: 50,
+    borderRadius: radii.lg,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 59, 48, 0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  errorText: { color: colors.danger, fontSize: 13, textAlign: 'center', marginTop: spacing.xs },
+
+  recentSection: { marginTop: spacing.xs },
+  sectionHeaderRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.sm },
+  sectionHeaderTitle: { color: colors.textMuted, fontSize: 12, fontWeight: '600', letterSpacing: 0.5 },
+  clearButtonText: { color: colors.accent, fontSize: 13, fontWeight: '600' },
+  recentRow: { gap: spacing.sm, paddingVertical: 2 },
+  recentThumbnail: {
+    width: 64,
+    height: 64,
+    borderRadius: radii.md,
+    overflow: 'hidden',
+    borderWidth: 1.5,
+    borderColor: colors.borderLight,
+    backgroundColor: colors.surface,
+  },
+  recentThumbnailSelected: { borderColor: colors.accent, borderWidth: 2 },
+  thumbnailImage: { width: '100%', height: '100%' },
+  thumbnailActiveBadge: {
+    position: 'absolute',
+    top: 3,
+    right: 3,
+    width: 17,
+    height: 17,
+    borderRadius: 8.5,
+    backgroundColor: colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyRecentBox: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+  },
+  emptyRecentText: { color: colors.textSubtle, fontSize: 13 },
 });
