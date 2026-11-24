@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Image, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -72,6 +72,26 @@ export default function HomeScreen() {
     setPickerError(null);
     setIsPicking(true);
     try {
+      if (Platform.OS === 'web') {
+        // On web / Safari, use standard HTML file input which opens Photo Library directly without native permission roadblocks
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = (e: any) => {
+          const file = e.target?.files?.[0];
+          if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            useReference(objectUrl);
+          }
+          setIsPicking(false);
+        };
+        input.oncancel = () => {
+          setIsPicking(false);
+        };
+        input.click();
+        return;
+      }
+
       const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (!permission.granted) {
         setPickerError('Photo access is needed to choose a reference pose. Enable it in Settings and try again.');
@@ -90,7 +110,9 @@ export default function HomeScreen() {
     } catch {
       setPickerError('We could not open your photo library. Please try again.');
     } finally {
-      setIsPicking(false);
+      if (Platform.OS !== 'web') {
+        setIsPicking(false);
+      }
     }
   };
 
