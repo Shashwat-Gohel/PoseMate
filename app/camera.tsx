@@ -478,31 +478,6 @@ export default function CameraScreen() {
             ) : null}
           </View>
 
-          {/* Floating Camera Zoom Dock (1x / 2x / 3x) */}
-          <View style={styles.floatingZoomDock}>
-            <Pressable
-              accessibilityLabel="1x Zoom"
-              style={[styles.zoomStepPill, cameraZoom === 0 && styles.zoomStepPillActive]}
-              onPress={() => setCameraZoom(0)}
-            >
-              <Text style={[styles.zoomStepText, cameraZoom === 0 && styles.zoomStepTextActive]} maxFontSizeMultiplier={1.0}>1×</Text>
-            </Pressable>
-            <Pressable
-              accessibilityLabel="2x Zoom"
-              style={[styles.zoomStepPill, cameraZoom === 0.25 && styles.zoomStepPillActive]}
-              onPress={() => setCameraZoom(0.25)}
-            >
-              <Text style={[styles.zoomStepText, cameraZoom === 0.25 && styles.zoomStepTextActive]} maxFontSizeMultiplier={1.0}>2×</Text>
-            </Pressable>
-            <Pressable
-              accessibilityLabel="3x Zoom"
-              style={[styles.zoomStepPill, cameraZoom === 0.5 && styles.zoomStepPillActive]}
-              onPress={() => setCameraZoom(0.5)}
-            >
-              <Text style={[styles.zoomStepText, cameraZoom === 0.5 && styles.zoomStepTextActive]} maxFontSizeMultiplier={1.0}>3×</Text>
-            </Pressable>
-          </View>
-
           {/* Bottom Floating Shutter Controls */}
           <View style={styles.bottomShutterDock}>
             {captureError ? <Text style={styles.captureErrorText}>{captureError}</Text> : null}
