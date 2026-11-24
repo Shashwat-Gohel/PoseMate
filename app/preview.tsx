@@ -9,11 +9,12 @@ import * as Haptics from 'expo-haptics';
 import * as Sharing from 'expo-sharing';
 
 export default function PreviewScreen() {
-  const { capturedUri } = useLocalSearchParams<{ capturedUri?: string }>();
+  const { capturedUri, referenceUri } = useLocalSearchParams<{ capturedUri?: string; referenceUri?: string }>();
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSharing, setIsSharing] = useState(false);
+  const [compareMode, setCompareMode] = useState(false);
 
   const savePhoto = async () => {
     if (!capturedUri || isSaving || saved) return;
@@ -82,13 +83,41 @@ export default function PreviewScreen() {
             <Text style={styles.navTitle}>Photo Preview</Text>
             <Text style={styles.navSubtitle}>ORIGINAL CAPTURE</Text>
           </View>
-          <View style={styles.navPlaceholder} />
+          {referenceUri ? (
+            <Pressable
+              accessibilityLabel={compareMode ? 'Exit comparison mode' : 'Compare with reference'}
+              style={({ pressed }) => [styles.compareToggleButton, compareMode && styles.compareToggleButtonActive, pressed && styles.pressed]}
+              onPress={() => setCompareMode((c) => !c)}
+            >
+              <Ionicons name="git-compare-outline" size={18} color={compareMode ? colors.accent : '#FFFFFF'} />
+            </Pressable>
+          ) : (
+            <View style={styles.navPlaceholder} />
+          )}
         </View>
 
-        {/* Photo Viewport */}
-        <View style={styles.photoViewport}>
-          <Image source={{ uri: capturedUri }} style={styles.image} resizeMode="contain" />
-        </View>
+        {/* Photo Viewport — normal or compare mode */}
+        {compareMode && referenceUri ? (
+          <View style={styles.compareContainer}>
+            <View style={styles.compareHalf}>
+              <Image source={{ uri: capturedUri }} style={styles.image} resizeMode="cover" />
+              <View style={styles.compareLabel}>
+                <Text style={styles.compareLabelText}>CAPTURED</Text>
+              </View>
+            </View>
+            <View style={styles.compareDivider} />
+            <View style={styles.compareHalf}>
+              <Image source={{ uri: referenceUri }} style={styles.image} resizeMode="cover" />
+              <View style={styles.compareLabel}>
+                <Text style={styles.compareLabelText}>REFERENCE</Text>
+              </View>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.photoViewport}>
+            <Image source={{ uri: capturedUri }} style={styles.image} resizeMode="contain" />
+          </View>
+        )}
 
         {error ? (
           <View style={styles.errorPill}>
@@ -158,6 +187,48 @@ const styles = StyleSheet.create({
   navTitle: { color: colors.text, fontSize: 17, fontWeight: '600', letterSpacing: -0.3 },
   navSubtitle: { color: colors.accent, fontSize: 9.5, fontWeight: '700', letterSpacing: 0.8, marginTop: 1 },
   navPlaceholder: { width: 36 },
+  compareToggleButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(44, 44, 46, 0.7)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  compareToggleButtonActive: {
+    backgroundColor: 'rgba(255, 214, 10, 0.2)',
+    borderWidth: 1,
+    borderColor: colors.accent,
+  },
+  compareContainer: {
+    flex: 1,
+    borderRadius: 24,
+    overflow: 'hidden',
+    marginVertical: spacing.sm,
+  },
+  compareHalf: {
+    flex: 1,
+    position: 'relative',
+  },
+  compareDivider: {
+    height: 2,
+    backgroundColor: colors.accent,
+  },
+  compareLabel: {
+    position: 'absolute',
+    top: spacing.sm,
+    left: spacing.sm,
+    backgroundColor: 'rgba(0,0,0,0.65)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: radii.pill,
+  },
+  compareLabelText: {
+    color: colors.accent,
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.8,
+  },
   pressed: { opacity: 0.7 },
 
   photoViewport: {

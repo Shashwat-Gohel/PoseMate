@@ -147,7 +147,13 @@ export default function CameraScreen() {
       const result = await cameraRef.current.takePictureAsync({ quality: 1 });
       if (!result?.uri) throw new Error('Capture returned no image.');
       setCapturedUri(result.uri);
-      router.push({ pathname: '/preview', params: { capturedUri: result.uri } });
+      router.push({
+        pathname: '/preview',
+        params: {
+          capturedUri: result.uri,
+          referenceUri: referenceUri ?? '',
+        },
+      });
     } catch {
       setCaptureError('We could not capture the photo. Please try again.');
     } finally {
@@ -245,7 +251,7 @@ export default function CameraScreen() {
           </Pressable>
 
           <View style={styles.topStatusPill}>
-            <Text style={styles.topStatusText}>ALIGNMENT</Text>
+            <Text style={styles.topStatusText} maxFontSizeMultiplier={1.1}>ALIGNMENT</Text>
           </View>
 
           <View style={styles.topActionsGroup}>
@@ -351,21 +357,21 @@ export default function CameraScreen() {
               style={[styles.zoomStepPill, cameraZoom === 0 && styles.zoomStepPillActive]}
               onPress={() => setCameraZoom(0)}
             >
-              <Text style={[styles.zoomStepText, cameraZoom === 0 && styles.zoomStepTextActive]}>1×</Text>
+              <Text style={[styles.zoomStepText, cameraZoom === 0 && styles.zoomStepTextActive]} maxFontSizeMultiplier={1.0}>1×</Text>
             </Pressable>
             <Pressable
               accessibilityLabel="2x Zoom"
               style={[styles.zoomStepPill, cameraZoom === 0.25 && styles.zoomStepPillActive]}
               onPress={() => setCameraZoom(0.25)}
             >
-              <Text style={[styles.zoomStepText, cameraZoom === 0.25 && styles.zoomStepTextActive]}>2×</Text>
+              <Text style={[styles.zoomStepText, cameraZoom === 0.25 && styles.zoomStepTextActive]} maxFontSizeMultiplier={1.0}>2×</Text>
             </Pressable>
             <Pressable
               accessibilityLabel="3x Zoom"
               style={[styles.zoomStepPill, cameraZoom === 0.5 && styles.zoomStepPillActive]}
               onPress={() => setCameraZoom(0.5)}
             >
-              <Text style={[styles.zoomStepText, cameraZoom === 0.5 && styles.zoomStepTextActive]}>3×</Text>
+              <Text style={[styles.zoomStepText, cameraZoom === 0.5 && styles.zoomStepTextActive]} maxFontSizeMultiplier={1.0}>3×</Text>
             </Pressable>
           </View>
 
@@ -389,8 +395,8 @@ export default function CameraScreen() {
             <View style={styles.overlayControlsCard}>
               <View style={styles.overlayControlHeader}>
                 <View style={styles.overlayStatusBadge}>
-                  <Text style={styles.overlayStatusLabel}>POSE OVERLAY</Text>
-                  <Text style={styles.overlayValueLabel}>{Math.round(overlayOpacity * 100)}%</Text>
+                  <Text style={styles.overlayStatusLabel} maxFontSizeMultiplier={1.1}>POSE OVERLAY</Text>
+                  <Text style={styles.overlayValueLabel} maxFontSizeMultiplier={1.1}>{Math.round(overlayOpacity * 100)}%</Text>
                 </View>
 
                 {/* Quick Action Tools */}

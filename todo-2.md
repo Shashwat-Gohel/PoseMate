@@ -710,7 +710,7 @@ This already works with 3 flex children. No change needed. The `retakeButton` ha
 
 ## Task 8 — Side-by-Side Comparison View
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🟡 High value  
 **Files to change:** `app/preview.tsx` only  
 **No new packages needed.**
@@ -888,7 +888,7 @@ In `StyleSheet.create({...})` in `preview.tsx`, add:
 
 ## Task 9 — Onboarding / First-Launch Tips
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🟡 Medium  
 **Files to change:** `app/index.tsx` only  
 **No new packages needed** — uses `AsyncStorage` already imported.
@@ -1088,7 +1088,7 @@ In `StyleSheet.create({...})` in `index.tsx`, add:
 
 ## Task 10 — EAS Build Configuration Completion
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🔴 BLOCKER (required before submitting to App Store)  
 **Files to change:** `eas.json` only
 
@@ -1153,7 +1153,7 @@ Replace the entire contents of `eas.json` with:
 
 ## Task 11 — Android `package` Identifier in `app.json`
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🟡 Required for Android builds  
 **Files to change:** `app.json` only
 
@@ -1189,7 +1189,7 @@ Replace with:
 
 ## Task 12 — Add `expo-haptics` to `app.json` plugin list
 
-**Status:** ❌ Not done (required after Task 4)  
+**Status:** ✅ Done  
 **Priority:** 🟡 Required for haptics to work in standalone builds  
 **Files to change:** `app.json`
 
@@ -1232,7 +1232,7 @@ Replace with:
 
 ## Task 13 — `maxFontSizeMultiplier` on Critical Text
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🟢 Accessibility  
 **Files to change:** `app/camera.tsx`
 
@@ -1264,7 +1264,7 @@ In `app/camera.tsx`, add `maxFontSizeMultiplier={1.1}` to these specific `<Text>
 
 ## Task 14 — `.gitignore` and Git Hygiene
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🟡 Required before any public repo  
 **Files to change:** `.gitignore` (create if missing)
 

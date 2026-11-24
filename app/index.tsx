@@ -16,6 +16,7 @@ export default function HomeScreen() {
   const [isPicking, setIsPicking] = useState(false);
   const [pickerError, setPickerError] = useState<string | null>(null);
   const [recentReferences, setRecentReferences] = useState<string[]>([]);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     const loadHistory = async () => {
@@ -28,7 +29,18 @@ export default function HomeScreen() {
         // Storage is optional; the current-session picker remains available.
       }
     };
+
+    const checkOnboarding = async () => {
+      try {
+        const seen = await AsyncStorage.getItem('@posemate/onboarding-seen');
+        if (!seen) setShowOnboarding(true);
+      } catch {
+        // If storage fails, do not block the user.
+      }
+    };
+
     void loadHistory();
+    void checkOnboarding();
   }, []);
 
   const persistHistory = async (nextHistory: string[]) => {
@@ -37,6 +49,15 @@ export default function HomeScreen() {
       await AsyncStorage.setItem(HISTORY_KEY, JSON.stringify(nextHistory));
     } catch {
       // Storage may be unavailable; keep the in-memory session usable.
+    }
+  };
+
+  const dismissOnboarding = async () => {
+    setShowOnboarding(false);
+    try {
+      await AsyncStorage.setItem('@posemate/onboarding-seen', '1');
+    } catch {
+      // Non-critical.
     }
   };
 
@@ -181,6 +202,48 @@ export default function HomeScreen() {
           )}
         </View>
       </ScrollView>
+
+      {/* First-Launch Onboarding Overlay */}
+      {showOnboarding ? (
+        <View style={styles.onboardingOverlay}>
+          <View style={styles.onboardingSheet}>
+            <View style={styles.onboardingHandle} />
+            <Text style={styles.onboardingTitle}>How PoseMate works</Text>
+
+            <View style={styles.onboardingStep}>
+              <View style={styles.onboardingStepNumber}><Text style={styles.onboardingStepNumText}>1</Text></View>
+              <View style={styles.onboardingStepBody}>
+                <Text style={styles.onboardingStepTitle}>Choose a Reference Photo</Text>
+                <Text style={styles.onboardingStepDesc}>Pick any image from your photo library — a pose, a composition, or a scene you want to recreate.</Text>
+              </View>
+            </View>
+
+            <View style={styles.onboardingStep}>
+              <View style={styles.onboardingStepNumber}><Text style={styles.onboardingStepNumText}>2</Text></View>
+              <View style={styles.onboardingStepBody}>
+                <Text style={styles.onboardingStepTitle}>Align with Your Camera</Text>
+                <Text style={styles.onboardingStepDesc}>The reference image floats over your live camera. Drag, pinch, and rotate it to match your subject to the reference.</Text>
+              </View>
+            </View>
+
+            <View style={styles.onboardingStep}>
+              <View style={styles.onboardingStepNumber}><Text style={styles.onboardingStepNumText}>3</Text></View>
+              <View style={styles.onboardingStepBody}>
+                <Text style={styles.onboardingStepTitle}>Capture and Save</Text>
+                <Text style={styles.onboardingStepDesc}>Tap the shutter. Your photo is saved cleanly — no overlay, just the perfect shot.</Text>
+              </View>
+            </View>
+
+            <Pressable
+              accessibilityLabel="Got it, dismiss tips"
+              style={({ pressed }) => [styles.onboardingButton, pressed && styles.pressed]}
+              onPress={dismissOnboarding}
+            >
+              <Text style={styles.onboardingButtonText}>Got it</Text>
+            </Pressable>
+          </View>
+        </View>
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -338,4 +401,77 @@ const styles = StyleSheet.create({
     padding: spacing.md,
   },
   emptyRecentText: { color: colors.textSubtle, fontSize: 13 },
+  onboardingOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    justifyContent: 'flex-end',
+    zIndex: 100,
+  },
+  onboardingSheet: {
+    backgroundColor: colors.surface,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    padding: spacing.xl,
+    paddingBottom: spacing.xxl,
+  },
+  onboardingHandle: {
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.borderLight,
+    alignSelf: 'center',
+    marginBottom: spacing.lg,
+  },
+  onboardingTitle: {
+    color: colors.text,
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: spacing.lg,
+    letterSpacing: -0.4,
+  },
+  onboardingStep: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.md,
+    marginBottom: spacing.md,
+  },
+  onboardingStepNumber: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 1,
+  },
+  onboardingStepNumText: {
+    color: '#000000',
+    fontSize: 14,
+    fontWeight: '800',
+  },
+  onboardingStepBody: { flex: 1 },
+  onboardingStepTitle: {
+    color: colors.text,
+    fontSize: 15,
+    fontWeight: '600',
+    marginBottom: 3,
+  },
+  onboardingStepDesc: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  onboardingButton: {
+    marginTop: spacing.lg,
+    height: 52,
+    borderRadius: radii.lg,
+    backgroundColor: colors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  onboardingButtonText: {
+    color: '#000000',
+    fontSize: 16,
+    fontWeight: '700',
+  },
 });

@@ -1,6 +1,28 @@
+# Dependencies
 node_modules/
+
+# Expo
 .expo/
+dist/
+web-build/
+
+# EAS / Credentials — NEVER commit these
+play-store-service-account.json
+*.p8
+*.p12
+*.mobileprovision
+google-services.json
+GoogleService-Info.plist
+
+# OS
 .DS_Store
+Thumbs.db
 *.log
 npm-debug.log*
 
+# TypeScript
+*.js.map
+
+# Build artifacts
+ios/
+android/
