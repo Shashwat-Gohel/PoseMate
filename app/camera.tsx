@@ -31,6 +31,7 @@ export default function CameraScreen() {
   const [captureError, setCaptureError] = useState<string | null>(null);
   const [isAppActive, setIsAppActive] = useState(true);
   const [overlayError, setOverlayError] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<'none' | 'arrange' | 'opacity'>('none');
   const cameraRef = useRef<CameraView | null>(null);
   const sliderStart = useRef(overlayOpacity);
   const gestureStart = useRef({ x: 0, y: 0, scale: 1, rotation: 0, distance: 0, angle: 0 });
@@ -244,47 +245,7 @@ export default function CameraScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* iOS Camera Top Utility Bar */}
-        <View style={styles.cameraTopBar}>
-          <Pressable accessibilityLabel="Close Camera" style={({ pressed }) => [styles.glassIconButton, pressed && styles.pressed]} onPress={() => router.back()}>
-            <Ionicons name="close" size={24} color="#FFFFFF" />
-          </Pressable>
-
-          <View style={styles.topStatusPill}>
-            <Text style={styles.topStatusText} maxFontSizeMultiplier={1.1}>ALIGNMENT</Text>
-          </View>
-
-          <View style={styles.topActionsGroup}>
-            {/* Timer Toggle */}
-            <Pressable
-              accessibilityLabel={timerSeconds === 0 ? 'Self-timer off' : `Self-timer ${timerSeconds} seconds`}
-              style={({ pressed }) => [styles.glassIconButton, timerSeconds > 0 && styles.glassIconButtonActive, pressed && styles.pressed]}
-              onPress={cycleTimer}
-            >
-              <Text style={[styles.timerButtonLabel, timerSeconds > 0 && styles.timerButtonLabelActive]}>
-                {timerSeconds === 0 ? '⏱' : `${timerSeconds}s`}
-              </Text>
-            </Pressable>
-
-            <Pressable
-              accessibilityLabel={torchEnabled ? 'Flash On' : 'Flash Off'}
-              style={({ pressed }) => [styles.glassIconButton, torchEnabled && styles.glassIconButtonActive, pressed && styles.pressed]}
-              onPress={() => setTorchEnabled((current) => !current)}
-            >
-              <Ionicons name={torchEnabled ? 'flash' : 'flash-off-outline'} size={20} color={torchEnabled ? colors.accent : '#FFFFFF'} />
-            </Pressable>
-
-            <Pressable
-              accessibilityLabel="Switch Camera"
-              style={({ pressed }) => [styles.glassIconButton, pressed && styles.pressed]}
-              onPress={() => setFacing((current) => current === 'back' ? 'front' : 'back')}
-            >
-              <Ionicons name="camera-reverse-outline" size={22} color="#FFFFFF" />
-            </Pressable>
-          </View>
-        </View>
-
-        {/* Live Camera Viewfinder Layer */}
+        {/* Full Screen Viewfinder Layer */}
         <View style={styles.viewfinder}>
           {isAppActive ? (
             <CameraView
@@ -350,7 +311,174 @@ export default function CameraScreen() {
             </View>
           ) : null}
 
-          {/* iOS Native Camera Zoom Pill Segment (0.5x / 1x / 2x / 3x) Floating in Viewfinder */}
+          {/* Shutter Flash Overlay */}
+          <Animated.View
+            pointerEvents="none"
+            style={[styles.shutterFlash, { opacity: shutterFlashOpacity }]}
+          />
+
+          {/* Self-Timer Countdown Overlay */}
+          {timerCountdown !== null ? (
+            <View pointerEvents="none" style={styles.timerCountdownOverlay}>
+              <Text style={styles.timerCountdownText}>{timerCountdown}</Text>
+            </View>
+          ) : null}
+
+          {/* Top Overlaid Controls Bar */}
+          <View style={styles.floatingTopBar}>
+            {/* Row 1: Main Header Tools */}
+            <View style={styles.cameraTopRow}>
+              <Pressable accessibilityLabel="Close Camera" style={({ pressed }) => [styles.glassIconButton, pressed && styles.pressed]} onPress={() => router.back()}>
+                <Ionicons name="close" size={24} color="#FFFFFF" />
+              </Pressable>
+
+              {/* Reference Pose Tool Buttons (Arrange & Opacity) */}
+              {referenceUri ? (
+                <View style={styles.refToolsPill}>
+                  <Pressable
+                    accessibilityLabel="Arrange Reference Pose"
+                    style={[styles.refMenuTab, activeMenu === 'arrange' && styles.refMenuTabActive]}
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      setActiveMenu((c) => c === 'arrange' ? 'none' : 'arrange');
+                    }}
+                  >
+                    <Ionicons name="move" size={15} color={activeMenu === 'arrange' ? '#000000' : '#FFFFFF'} />
+                    <Text style={[styles.refMenuTabText, activeMenu === 'arrange' && styles.refMenuTabTextActive]}>Arrange</Text>
+                  </Pressable>
+
+                  <Pressable
+                    accessibilityLabel="Adjust Overlay Opacity"
+                    style={[styles.refMenuTab, activeMenu === 'opacity' && styles.refMenuTabActive]}
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      setActiveMenu((c) => c === 'opacity' ? 'none' : 'opacity');
+                    }}
+                  >
+                    <Ionicons name="contrast" size={15} color={activeMenu === 'opacity' ? '#000000' : '#FFFFFF'} />
+                    <Text style={[styles.refMenuTabText, activeMenu === 'opacity' && styles.refMenuTabTextActive]}>
+                      {Math.round(overlayOpacity * 100)}%
+                    </Text>
+                  </Pressable>
+                </View>
+              ) : null}
+
+              {/* Camera Utilities (Timer, Flash, Flip) */}
+              <View style={styles.topActionsGroup}>
+                <Pressable
+                  accessibilityLabel={timerSeconds === 0 ? 'Self-timer off' : `Self-timer ${timerSeconds}s`}
+                  style={({ pressed }) => [styles.glassIconButton, timerSeconds > 0 && styles.glassIconButtonActive, pressed && styles.pressed]}
+                  onPress={cycleTimer}
+                >
+                  <Text style={[styles.timerButtonLabel, timerSeconds > 0 && styles.timerButtonLabelActive]}>
+                    {timerSeconds === 0 ? '⏱' : `${timerSeconds}s`}
+                  </Text>
+                </Pressable>
+
+                <Pressable
+                  accessibilityLabel={torchEnabled ? 'Flash On' : 'Flash Off'}
+                  style={({ pressed }) => [styles.glassIconButton, torchEnabled && styles.glassIconButtonActive, pressed && styles.pressed]}
+                  onPress={() => setTorchEnabled((current) => !current)}
+                >
+                  <Ionicons name={torchEnabled ? 'flash' : 'flash-off-outline'} size={18} color={torchEnabled ? colors.accent : '#FFFFFF'} />
+                </Pressable>
+
+                <Pressable
+                  accessibilityLabel="Switch Camera"
+                  style={({ pressed }) => [styles.glassIconButton, pressed && styles.pressed]}
+                  onPress={() => setFacing((current) => current === 'back' ? 'front' : 'back')}
+                >
+                  <Ionicons name="camera-reverse-outline" size={20} color="#FFFFFF" />
+                </Pressable>
+              </View>
+            </View>
+
+            {/* Sub-menu Dropdown: Arrange Sub-Tools (Arrows & Zoom) */}
+            {activeMenu === 'arrange' && referenceUri ? (
+              <View style={styles.submenuContainer}>
+                {/* Micro Action Buttons: Zoom In/Out, Flip, Lock, Reset */}
+                <View style={styles.quickToolsRow}>
+                  <Pressable accessibilityLabel="Zoom Out Reference" style={styles.microToolButton} onPress={() => adjustOverlayZoom(-0.15)}>
+                    <Ionicons name="remove" size={18} color="#FFFFFF" />
+                  </Pressable>
+                  <Pressable accessibilityLabel="Zoom In Reference" style={styles.microToolButton} onPress={() => adjustOverlayZoom(0.15)}>
+                    <Ionicons name="add" size={18} color="#FFFFFF" />
+                  </Pressable>
+                  <Pressable accessibilityLabel="Flip Reference" style={styles.microToolButton} onPress={() => !overlayLocked && setOverlayFlipped((c) => !c)}>
+                    <Ionicons name="swap-horizontal" size={18} color="#FFFFFF" />
+                  </Pressable>
+                  <Pressable
+                    accessibilityLabel={overlayLocked ? "Unlock Pose" : "Lock Pose"}
+                    style={[styles.microToolButton, overlayLocked && styles.microToolActive]}
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      setOverlayLocked((c) => !c);
+                    }}
+                  >
+                    <Ionicons name={overlayLocked ? "lock-closed" : "lock-open-outline"} size={16} color={overlayLocked ? colors.accent : "#FFFFFF"} />
+                  </Pressable>
+                  <Pressable
+                    accessibilityLabel="Reset Pose Alignment"
+                    style={styles.microToolButton}
+                    onPress={() => {
+                      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                      resetOverlay();
+                    }}
+                  >
+                    <Ionicons name="refresh" size={16} color="#FFFFFF" />
+                  </Pressable>
+                </View>
+
+                {/* 4 Directional Arrows */}
+                <View style={styles.nudgeRow}>
+                  <Pressable
+                    accessibilityLabel="Move reference left"
+                    style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
+                    onPress={() => nudgeOverlay(-12, 0)}
+                    disabled={overlayLocked}
+                  >
+                    <Ionicons name="arrow-back" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
+                  </Pressable>
+                  <Pressable
+                    accessibilityLabel="Move reference up"
+                    style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
+                    onPress={() => nudgeOverlay(0, -12)}
+                    disabled={overlayLocked}
+                  >
+                    <Ionicons name="arrow-up" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
+                  </Pressable>
+                  <Pressable
+                    accessibilityLabel="Move reference down"
+                    style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
+                    onPress={() => nudgeOverlay(0, 12)}
+                    disabled={overlayLocked}
+                  >
+                    <Ionicons name="arrow-down" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
+                  </Pressable>
+                  <Pressable
+                    accessibilityLabel="Move reference right"
+                    style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
+                    onPress={() => nudgeOverlay(12, 0)}
+                    disabled={overlayLocked}
+                  >
+                    <Ionicons name="arrow-forward" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
+                  </Pressable>
+                </View>
+              </View>
+            ) : null}
+
+            {/* Sub-menu Dropdown: Opacity Slider */}
+            {activeMenu === 'opacity' && referenceUri ? (
+              <View style={styles.submenuContainer}>
+                <View onLayout={(e) => setSliderWidth(e.nativeEvent.layout.width)} style={styles.sliderTrack} {...opacityResponder.panHandlers}>
+                  <View style={[styles.sliderFill, { width: `${overlayOpacity * 100}%` }]} />
+                  <View style={[styles.sliderThumb, { left: `${overlayOpacity * 100}%` }]} />
+                </View>
+              </View>
+            ) : null}
+          </View>
+
+          {/* Floating Camera Zoom Dock (1x / 2x / 3x) */}
           <View style={styles.floatingZoomDock}>
             <Pressable
               accessibilityLabel="1x Zoom"
@@ -375,115 +503,9 @@ export default function CameraScreen() {
             </Pressable>
           </View>
 
-          {/* Shutter Flash Overlay */}
-          <Animated.View
-            pointerEvents="none"
-            style={[styles.shutterFlash, { opacity: shutterFlashOpacity }]}
-          />
-
-          {/* Self-Timer Countdown Overlay */}
-          {timerCountdown !== null ? (
-            <View pointerEvents="none" style={styles.timerCountdownOverlay}>
-              <Text style={styles.timerCountdownText}>{timerCountdown}</Text>
-            </View>
-          ) : null}
-        </View>
-
-        {/* Bottom Control Sheet */}
-        <View style={styles.bottomControlSheet}>
-          {referenceUri ? (
-            <View style={styles.overlayControlsCard}>
-              <View style={styles.overlayControlHeader}>
-                <View style={styles.overlayStatusBadge}>
-                  <Text style={styles.overlayStatusLabel} maxFontSizeMultiplier={1.1}>POSE OVERLAY</Text>
-                  <Text style={styles.overlayValueLabel} maxFontSizeMultiplier={1.1}>{Math.round(overlayOpacity * 100)}%</Text>
-                </View>
-
-                {/* Quick Action Tools */}
-                <View style={styles.quickToolsRow}>
-                  <Pressable accessibilityLabel="Zoom Out Reference" style={styles.microToolButton} onPress={() => adjustOverlayZoom(-0.15)}>
-                    <Ionicons name="remove" size={17} color="#FFFFFF" />
-                  </Pressable>
-                  <Pressable accessibilityLabel="Zoom In Reference" style={styles.microToolButton} onPress={() => adjustOverlayZoom(0.15)}>
-                    <Ionicons name="add" size={17} color="#FFFFFF" />
-                  </Pressable>
-                  <Pressable accessibilityLabel="Flip Reference" style={styles.microToolButton} onPress={() => !overlayLocked && setOverlayFlipped((c) => !c)}>
-                    <Ionicons name="swap-horizontal" size={17} color="#FFFFFF" />
-                  </Pressable>
-                  <Pressable
-                    accessibilityLabel={overlayLocked ? "Unlock Pose" : "Lock Pose"}
-                    style={[styles.microToolButton, overlayLocked && styles.microToolActive]}
-                    onPress={() => {
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                      setOverlayLocked((c) => !c);
-                    }}
-                  >
-                    <Ionicons name={overlayLocked ? "lock-closed" : "lock-open-outline"} size={16} color={overlayLocked ? colors.accent : "#FFFFFF"} />
-                  </Pressable>
-                  <Pressable
-                    accessibilityLabel="Reset Pose Alignment"
-                    style={styles.microToolButton}
-                    onPress={() => {
-                      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-                      resetOverlay();
-                    }}
-                  >
-                    <Ionicons name="refresh" size={16} color="#FFFFFF" />
-                  </Pressable>
-                </View>
-              </View>
-
-              {/* Directional Nudge Arrows */}
-              <View style={styles.nudgeRow}>
-                <Pressable
-                  accessibilityLabel="Move reference left"
-                  style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
-                  onPress={() => nudgeOverlay(-12, 0)}
-                  disabled={overlayLocked}
-                >
-                  <Ionicons name="arrow-back" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
-                </Pressable>
-                <Pressable
-                  accessibilityLabel="Move reference up"
-                  style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
-                  onPress={() => nudgeOverlay(0, -12)}
-                  disabled={overlayLocked}
-                >
-                  <Ionicons name="arrow-up" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
-                </Pressable>
-                <Pressable
-                  accessibilityLabel="Move reference down"
-                  style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
-                  onPress={() => nudgeOverlay(0, 12)}
-                  disabled={overlayLocked}
-                >
-                  <Ionicons name="arrow-down" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
-                </Pressable>
-                <Pressable
-                  accessibilityLabel="Move reference right"
-                  style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
-                  onPress={() => nudgeOverlay(12, 0)}
-                  disabled={overlayLocked}
-                >
-                  <Ionicons name="arrow-forward" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
-                </Pressable>
-              </View>
-
-              {/* iOS Native Slider Track */}
-              <View onLayout={(e) => setSliderWidth(e.nativeEvent.layout.width)} style={styles.sliderTrack} {...opacityResponder.panHandlers}>
-                <View style={[styles.sliderFill, { width: `${overlayOpacity * 100}%` }]} />
-                <View style={[styles.sliderThumb, { left: `${overlayOpacity * 100}%` }]} />
-              </View>
-            </View>
-          ) : (
-            <Text style={styles.tipText}>Tap Photos to add a reference pose overlay</Text>
-          )}
-
-          {captureError ? <Text style={styles.captureErrorText}>{captureError}</Text> : null}
-
-          {/* iOS Camera Shutter Dock */}
-          <View style={styles.shutterRow}>
-            <View style={styles.shutterSidePlaceholder} />
+          {/* Bottom Floating Shutter Controls */}
+          <View style={styles.bottomShutterDock}>
+            {captureError ? <Text style={styles.captureErrorText}>{captureError}</Text> : null}
 
             <Pressable
               accessibilityLabel="Take Photo"
@@ -497,8 +519,6 @@ export default function CameraScreen() {
                 {isCapturing ? <ActivityIndicator color="#000000" size="small" /> : null}
               </View>
             </Pressable>
-
-            <View style={styles.shutterSidePlaceholder} />
           </View>
         </View>
       </View>
@@ -515,45 +535,123 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? { touchAction: 'none' } : {}),
   },
 
-  // Top Bar
-  cameraTopBar: {
-    height: 54,
+  viewfinder: {
+    flex: 1,
+    backgroundColor: '#000000',
+    overflow: 'hidden',
+    position: 'relative',
+    ...(Platform.OS === 'web' ? { touchAction: 'none' } : {}),
+  },
+
+  // Floating Top Overlaid Bar
+  floatingTopBar: {
+    position: 'absolute',
+    top: 10,
+    left: 12,
+    right: 12,
+    zIndex: 30,
+  },
+  cameraTopRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
   },
-  glassIconButton: {
-    width: 40,
-    height: 40,
+  refToolsPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(28, 28, 30, 0.75)',
+    borderRadius: radii.pill,
+    padding: 3,
+    gap: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+  },
+  refMenuTab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: radii.pill,
+  },
+  refMenuTabActive: {
+    backgroundColor: colors.accent,
+  },
+  refMenuTabText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  refMenuTabTextActive: {
+    color: '#000000',
+    fontWeight: '700',
+  },
+  submenuContainer: {
+    marginTop: 10,
+    backgroundColor: 'rgba(28, 28, 30, 0.88)',
     borderRadius: 20,
-    backgroundColor: 'rgba(44, 44, 46, 0.65)',
+    padding: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    alignItems: 'center',
+  },
+
+  glassIconButton: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: 'rgba(28, 28, 30, 0.75)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  glassIconButtonActive: {
+    backgroundColor: 'rgba(255, 214, 10, 0.3)',
+    borderColor: colors.accent,
+  },
+  topActionsGroup: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  pressed: { opacity: 0.7 },
+
+  // Floating Zoom Dial in Viewfinder
+  floatingZoomDock: {
+    position: 'absolute',
+    bottom: 105,
+    alignSelf: 'center',
+    flexDirection: 'row',
+    backgroundColor: 'rgba(28, 28, 30, 0.75)',
+    padding: 3,
+    borderRadius: radii.pill,
+    zIndex: 10,
+    gap: 3,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  zoomStepPill: {
+    width: 38,
+    height: 30,
+    borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  glassIconButtonActive: {
-    backgroundColor: 'rgba(255, 214, 10, 0.25)',
+  zoomStepPillActive: {
+    backgroundColor: 'rgba(255, 255, 255, 0.22)',
   },
-  topStatusPill: {
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: radii.pill,
-    backgroundColor: 'rgba(44, 44, 46, 0.6)',
-  },
-  topStatusText: { color: colors.accent, fontSize: 11, fontWeight: '700', letterSpacing: 0.8 },
-  topActionsGroup: { flexDirection: 'row', alignItems: 'center', gap: 10 },
-  pressed: { opacity: 0.7 },
+  zoomStepText: { color: 'rgba(255, 255, 255, 0.75)', fontSize: 12, fontWeight: '700' },
+  zoomStepTextActive: { color: colors.accent },
 
-  // Viewfinder
-  viewfinder: {
-    flex: 1,
-    borderRadius: 28,
-    backgroundColor: '#0A0A0A',
-    overflow: 'hidden',
-    position: 'relative',
-    marginHorizontal: 8,
-    ...(Platform.OS === 'web' ? { touchAction: 'none' } : {}),
+  // Bottom Floating Shutter Controls
+  bottomShutterDock: {
+    position: 'absolute',
+    bottom: 20,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 25,
   },
+  captureErrorText: { color: colors.danger, fontSize: 13, marginBottom: 8, textAlign: 'center' },
+
   compositionGrid: { ...StyleSheet.absoluteFill, zIndex: 1, opacity: 0.18 },
   gridH1: { position: 'absolute', top: '33.33%', left: 0, right: 0, height: 1, backgroundColor: '#FFFFFF' },
   gridH2: { position: 'absolute', top: '66.66%', left: 0, right: 0, height: 1, backgroundColor: '#FFFFFF' },
@@ -597,117 +695,55 @@ const styles = StyleSheet.create({
   overlayError: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center' },
   overlayErrorText: { color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.7)', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 16, fontSize: 13 },
 
-  // Floating Zoom Dial in Viewfinder
-  floatingZoomDock: {
-    position: 'absolute',
-    bottom: 16,
-    alignSelf: 'center',
-    flexDirection: 'row',
-    backgroundColor: 'rgba(28, 28, 30, 0.72)',
-    padding: 3,
-    borderRadius: radii.pill,
-    zIndex: 10,
-    gap: 3,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-  },
-  zoomStepPill: {
-    width: 38,
-    height: 30,
-    borderRadius: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  zoomStepPillActive: {
-    backgroundColor: 'rgba(255, 255, 255, 0.22)',
-  },
-  zoomStepText: { color: 'rgba(255, 255, 255, 0.75)', fontSize: 12, fontWeight: '700' },
-  zoomStepTextActive: { color: colors.accent },
-
-  // Bottom Control Sheet
-  bottomControlSheet: {
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.lg,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  overlayControlsCard: {
-    width: '100%',
-    backgroundColor: '#1C1C1E',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginBottom: spacing.md,
-  },
-  overlayControlHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  overlayStatusBadge: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  overlayStatusLabel: { color: colors.textMuted, fontSize: 11, fontWeight: '700', letterSpacing: 0.5 },
-  overlayValueLabel: { color: colors.accent, fontSize: 12, fontWeight: '700' },
-  quickToolsRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  quickToolsRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 },
   microToolButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#2C2C2E',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#3A3A3C',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  microToolActive: { backgroundColor: 'rgba(255, 214, 10, 0.2)' },
+  microToolActive: { backgroundColor: 'rgba(255, 214, 10, 0.3)', borderWidth: 1, borderColor: colors.accent },
   nudgeRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 12,
-    marginBottom: 10,
+    gap: 14,
   },
   nudgeButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#2C2C2E',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#3A3A3C',
     alignItems: 'center',
     justifyContent: 'center',
   },
   disabledButton: { opacity: 0.35 },
   sliderTrack: {
-    height: 24,
+    width: '90%',
+    height: 28,
     justifyContent: 'center',
-    backgroundColor: '#2C2C2E',
-    borderRadius: 12,
+    backgroundColor: '#3A3A3C',
+    borderRadius: 14,
     overflow: 'hidden',
     position: 'relative',
   },
   sliderFill: { position: 'absolute', left: 0, top: 0, bottom: 0, backgroundColor: colors.accent, opacity: 0.8 },
   sliderThumb: {
     position: 'absolute',
-    width: 22,
-    height: 22,
-    marginLeft: -11,
-    borderRadius: 11,
+    width: 24,
+    height: 24,
+    marginLeft: -12,
+    borderRadius: 12,
     backgroundColor: '#FFFFFF',
     shadowColor: '#000000',
     shadowOpacity: 0.35,
     shadowRadius: 4,
     elevation: 3,
   },
-  tipText: { color: colors.textSubtle, fontSize: 13, marginBottom: spacing.sm },
-  captureErrorText: { color: colors.danger, fontSize: 13, marginBottom: 8, textAlign: 'center' },
 
-  // Apple Camera Shutter
-  shutterRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    paddingHorizontal: spacing.lg,
-  },
-  shutterSidePlaceholder: { width: 50 },
+  // Apple Camera Shutter Ring
   iosShutterOuterRing: {
     width: 78,
     height: 78,
