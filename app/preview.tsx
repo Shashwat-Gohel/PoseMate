@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -21,6 +21,18 @@ export default function PreviewScreen() {
     setIsSaving(true);
     setError(null);
     try {
+      if (Platform.OS === 'web') {
+        // In web / Safari PWA, trigger standard browser download / save to Photos
+        const link = document.createElement('a');
+        link.href = capturedUri;
+        link.download = `PoseMate_${Date.now()}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setSaved(true);
+        return;
+      }
+
       const permission = await MediaLibrary.requestPermissionsAsync(true);
       if (!permission.granted) {
         setError('Photo access is needed to save this image. Please enable photo/gallery permission in Settings and try again.');
@@ -51,6 +63,20 @@ export default function PreviewScreen() {
     if (!capturedUri || isSharing) return;
     setIsSharing(true);
     try {
+      if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.share) {
+        // Use Web Share API if supported by Safari / browser
+        const response = await fetch(capturedUri);
+        const blob = await response.blob();
+        const file = new File([blob], `PoseMate_${Date.now()}.jpg`, { type: 'image/jpeg' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: 'PoseMate Photo',
+          });
+          return;
+        }
+      }
+
       const isAvailable = await Sharing.isAvailableAsync();
       if (!isAvailable) {
         setError('Sharing is not available on this device.');
@@ -61,7 +87,8 @@ export default function PreviewScreen() {
         dialogTitle: 'Share your photo',
         UTI: 'public.jpeg',
       });
-    } catch {
+    } catch (err: any) {
+      if (err?.name === 'AbortError') return; // User simply cancelled share sheet
       setError('Could not open the share sheet. Please try again.');
     } finally {
       setIsSharing(false);
