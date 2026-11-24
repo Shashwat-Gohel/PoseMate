@@ -22,7 +22,31 @@ export default function PreviewScreen() {
     setError(null);
     try {
       if (Platform.OS === 'web') {
-        // In web / Safari PWA, trigger standard browser download / save to Photos
+        // On iOS Safari, <a download> does NOT save to Camera Roll.
+        // Use Web Share API (navigator.share with a File) → iOS Share Sheet → "Save Image"
+        try {
+          const response = await fetch(capturedUri);
+          const blob = await response.blob();
+          const filename = `PoseMate_${Date.now()}.jpg`;
+          const file = new File([blob], filename, { type: 'image/jpeg' });
+          if (
+            typeof navigator !== 'undefined' &&
+            navigator.share &&
+            navigator.canShare &&
+            navigator.canShare({ files: [file] })
+          ) {
+            await navigator.share({ files: [file], title: 'PoseMate Photo' });
+            setSaved(true);
+            return;
+          }
+        } catch (shareErr: any) {
+          if (shareErr?.name === 'AbortError') {
+            // User cancelled share sheet — treat as "not saved" but don't show error
+            return;
+          }
+          // navigator.share failed — fall through to <a download> as last resort
+        }
+        // Fallback: <a download> (works on desktop browsers, limited on mobile)
         const link = document.createElement('a');
         link.href = capturedUri;
         link.download = `PoseMate_${Date.now()}.jpg`;
