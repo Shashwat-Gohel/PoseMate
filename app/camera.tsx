@@ -433,6 +433,42 @@ export default function CameraScreen() {
                 </View>
               </View>
 
+              {/* Directional Nudge Arrows */}
+              <View style={styles.nudgeRow}>
+                <Pressable
+                  accessibilityLabel="Move reference left"
+                  style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
+                  onPress={() => nudgeOverlay(-12, 0)}
+                  disabled={overlayLocked}
+                >
+                  <Ionicons name="arrow-back" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
+                </Pressable>
+                <Pressable
+                  accessibilityLabel="Move reference up"
+                  style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
+                  onPress={() => nudgeOverlay(0, -12)}
+                  disabled={overlayLocked}
+                >
+                  <Ionicons name="arrow-up" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
+                </Pressable>
+                <Pressable
+                  accessibilityLabel="Move reference down"
+                  style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
+                  onPress={() => nudgeOverlay(0, 12)}
+                  disabled={overlayLocked}
+                >
+                  <Ionicons name="arrow-down" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
+                </Pressable>
+                <Pressable
+                  accessibilityLabel="Move reference right"
+                  style={({ pressed }) => [styles.nudgeButton, pressed && styles.pressed, overlayLocked && styles.disabledButton]}
+                  onPress={() => nudgeOverlay(12, 0)}
+                  disabled={overlayLocked}
+                >
+                  <Ionicons name="arrow-forward" size={17} color={overlayLocked ? colors.textMuted : "#FFFFFF"} />
+                </Pressable>
+              </View>
+
               {/* iOS Native Slider Track */}
               <View onLayout={(e) => setSliderWidth(e.nativeEvent.layout.width)} style={styles.sliderTrack} {...opacityResponder.panHandlers}>
                 <View style={[styles.sliderFill, { width: `${overlayOpacity * 100}%` }]} />
@@ -618,6 +654,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   microToolActive: { backgroundColor: 'rgba(255, 214, 10, 0.2)' },
+  nudgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    marginBottom: 10,
+  },
+  nudgeButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#2C2C2E',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  disabledButton: { opacity: 0.35 },
   sliderTrack: {
     height: 24,
     justifyContent: 'center',

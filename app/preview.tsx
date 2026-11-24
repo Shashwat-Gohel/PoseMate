@@ -26,8 +26,14 @@ export default function PreviewScreen() {
         setError('Photo access is needed to save this image. Please enable photo/gallery permission in Settings and try again.');
         return;
       }
-      const asset = await MediaLibrary.createAssetAsync(capturedUri);
-      if (asset) {
+      // Use modern Asset.create if available, fallback to createAssetAsync
+      let savedAsset = null;
+      if (typeof (MediaLibrary as any).Asset?.create === 'function') {
+        savedAsset = await (MediaLibrary as any).Asset.create(capturedUri);
+      } else if (typeof (MediaLibrary as any).createAssetAsync === 'function') {
+        savedAsset = await (MediaLibrary as any).createAssetAsync(capturedUri);
+      }
+      if (savedAsset) {
         setSaved(true);
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       } else {
