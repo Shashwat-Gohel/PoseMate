@@ -44,7 +44,12 @@ export default function SettingsScreen() {
     }
   };
 
+  const isPhotosGranted = Platform.OS === 'web' || !!mediaPermission?.granted;
+
   const handleToggleMedia = async () => {
+    if (Platform.OS === 'web') {
+      return; // On web browsers, Photos access is always available on-demand via the file picker
+    }
     if (!mediaPermission?.granted) {
       if (mediaPermission?.canAskAgain) {
         const next = await MediaLibrary.requestPermissionsAsync(true);
@@ -53,7 +58,6 @@ export default function SettingsScreen() {
         await Linking.openSettings();
       }
     } else {
-      // Direct user to device settings if they wish to revoke/change permission
       await Linking.openSettings();
     }
   };
@@ -124,20 +128,20 @@ export default function SettingsScreen() {
             <View style={styles.listTextContent}>
               <Text style={styles.listItemTitle}>Photos</Text>
               <Text style={styles.listItemSubtitle}>
-                {mediaPermission?.granted ? 'Access Granted' : 'Required to Pick & Save'}
+                {isPhotosGranted ? 'Access Available' : 'Required to Pick & Save'}
               </Text>
             </View>
             <Pressable
               accessibilityLabel="Manage Photo Permission"
               style={({ pressed }) => [
                 styles.statusBadge,
-                mediaPermission?.granted ? styles.statusBadgeGranted : styles.statusBadgeDenied,
+                isPhotosGranted ? styles.statusBadgeGranted : styles.statusBadgeDenied,
                 pressed && styles.pressed,
               ]}
               onPress={handleToggleMedia}
             >
-              <Text style={[styles.statusBadgeText, mediaPermission?.granted && styles.statusBadgeTextGranted]}>
-                {mediaPermission?.granted ? 'Allowed' : 'Allow'}
+              <Text style={[styles.statusBadgeText, isPhotosGranted && styles.statusBadgeTextGranted]}>
+                {isPhotosGranted ? 'Allowed' : 'Allow'}
               </Text>
             </Pressable>
           </View>
