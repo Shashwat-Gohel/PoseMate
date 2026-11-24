@@ -1,4 +1,4 @@
-import { ActivityIndicator, Animated, AppState, Image, LayoutAnimation, PanResponder, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, AppState, Image, LayoutAnimation, PanResponder, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -509,7 +509,11 @@ export default function CameraScreen() {
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#000000' },
   permissionState: { flex: 1, backgroundColor: '#000000', alignItems: 'center', justifyContent: 'center', padding: spacing.xl },
-  container: { flex: 1, backgroundColor: '#000000' },
+  container: {
+    flex: 1,
+    backgroundColor: '#000000',
+    ...(Platform.OS === 'web' ? { touchAction: 'none' } : {}),
+  },
 
   // Top Bar
   cameraTopBar: {
@@ -548,6 +552,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     position: 'relative',
     marginHorizontal: 8,
+    ...(Platform.OS === 'web' ? { touchAction: 'none' } : {}),
   },
   compositionGrid: { ...StyleSheet.absoluteFill, zIndex: 1, opacity: 0.18 },
   gridH1: { position: 'absolute', top: '33.33%', left: 0, right: 0, height: 1, backgroundColor: '#FFFFFF' },
