@@ -1,4 +1,4 @@
-import { ActivityIndicator, AppState, Image, LayoutAnimation, PanResponder, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, AppState, Image, LayoutAnimation, PanResponder, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,6 +6,7 @@ import { CameraView, useCameraPermissions } from 'expo-camera';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { colors, radii, spacing, typography } from '@/constants/theme';
+import * as Haptics from 'expo-haptics';
 
 export default function CameraScreen() {
   const { referenceUri } = useLocalSearchParams<{ referenceUri?: string }>();
@@ -23,6 +24,9 @@ export default function CameraScreen() {
   const [rotationEnabled, setRotationEnabled] = useState(false);
   const [controlsExpanded, setControlsExpanded] = useState(true);
   const [isCapturing, setIsCapturing] = useState(false);
+  const [timerSeconds, setTimerSeconds] = useState<0 | 3 | 5 | 10>(0);
+  const [timerCountdown, setTimerCountdown] = useState<number | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [capturedUri, setCapturedUri] = useState<string | null>(null);
   const [captureError, setCaptureError] = useState<string | null>(null);
   const [isAppActive, setIsAppActive] = useState(true);
@@ -30,6 +34,7 @@ export default function CameraScreen() {
   const cameraRef = useRef<CameraView | null>(null);
   const sliderStart = useRef(overlayOpacity);
   const gestureStart = useRef({ x: 0, y: 0, scale: 1, rotation: 0, distance: 0, angle: 0 });
+  const shutterFlashOpacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextState) => {
@@ -38,6 +43,12 @@ export default function CameraScreen() {
       if (!active) setIsCameraReady(false);
     });
     return () => subscription.remove();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, []);
 
   const updateOpacityFromTouch = (locationX: number) => {
@@ -83,6 +94,15 @@ export default function CameraScreen() {
     });
   };
 
+  const cycleTimer = () => {
+    setTimerSeconds((prev) => {
+      if (prev === 0) return 3;
+      if (prev === 3) return 5;
+      if (prev === 5) return 10;
+      return 0;
+    });
+  };
+
   const toggleControls = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setControlsExpanded((current) => !current);
@@ -90,6 +110,37 @@ export default function CameraScreen() {
 
   const capturePhoto = async () => {
     if (!cameraRef.current || !isCameraReady || isCapturing) return;
+
+    if (timerSeconds > 0 && timerCountdown === null) {
+      // Start countdown
+      setTimerCountdown(timerSeconds);
+      let remaining = timerSeconds;
+      timerRef.current = setInterval(() => {
+        remaining -= 1;
+        if (remaining <= 0) {
+          if (timerRef.current) clearInterval(timerRef.current);
+          setTimerCountdown(null);
+          // Fire actual capture after countdown
+          void fireCaptureNow();
+        } else {
+          setTimerCountdown(remaining);
+        }
+      }, 1000);
+      return;
+    }
+
+    await fireCaptureNow();
+  };
+
+  const fireCaptureNow = async () => {
+    if (!cameraRef.current || !isCameraReady || isCapturing) return;
+    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    shutterFlashOpacity.setValue(1);
+    Animated.timing(shutterFlashOpacity, {
+      toValue: 0,
+      duration: 220,
+      useNativeDriver: true,
+    }).start();
     setCaptureError(null);
     setIsCapturing(true);
     try {
@@ -198,6 +249,17 @@ export default function CameraScreen() {
           </View>
 
           <View style={styles.topActionsGroup}>
+            {/* Timer Toggle */}
+            <Pressable
+              accessibilityLabel={timerSeconds === 0 ? 'Self-timer off' : `Self-timer ${timerSeconds} seconds`}
+              style={({ pressed }) => [styles.glassIconButton, timerSeconds > 0 && styles.glassIconButtonActive, pressed && styles.pressed]}
+              onPress={cycleTimer}
+            >
+              <Text style={[styles.timerButtonLabel, timerSeconds > 0 && styles.timerButtonLabelActive]}>
+                {timerSeconds === 0 ? '⏱' : `${timerSeconds}s`}
+              </Text>
+            </Pressable>
+
             <Pressable
               accessibilityLabel={torchEnabled ? 'Flash On' : 'Flash Off'}
               style={({ pressed }) => [styles.glassIconButton, torchEnabled && styles.glassIconButtonActive, pressed && styles.pressed]}
@@ -306,6 +368,19 @@ export default function CameraScreen() {
               <Text style={[styles.zoomStepText, cameraZoom === 0.5 && styles.zoomStepTextActive]}>3×</Text>
             </Pressable>
           </View>
+
+          {/* Shutter Flash Overlay */}
+          <Animated.View
+            pointerEvents="none"
+            style={[styles.shutterFlash, { opacity: shutterFlashOpacity }]}
+          />
+
+          {/* Self-Timer Countdown Overlay */}
+          {timerCountdown !== null ? (
+            <View pointerEvents="none" style={styles.timerCountdownOverlay}>
+              <Text style={styles.timerCountdownText}>{timerCountdown}</Text>
+            </View>
+          ) : null}
         </View>
 
         {/* Bottom Control Sheet */}
@@ -329,10 +404,24 @@ export default function CameraScreen() {
                   <Pressable accessibilityLabel="Flip Reference" style={styles.microToolButton} onPress={() => !overlayLocked && setOverlayFlipped((c) => !c)}>
                     <Ionicons name="swap-horizontal" size={17} color="#FFFFFF" />
                   </Pressable>
-                  <Pressable accessibilityLabel={overlayLocked ? "Unlock Pose" : "Lock Pose"} style={[styles.microToolButton, overlayLocked && styles.microToolActive]} onPress={() => setOverlayLocked((c) => !c)}>
+                  <Pressable
+                    accessibilityLabel={overlayLocked ? "Unlock Pose" : "Lock Pose"}
+                    style={[styles.microToolButton, overlayLocked && styles.microToolActive]}
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      setOverlayLocked((c) => !c);
+                    }}
+                  >
                     <Ionicons name={overlayLocked ? "lock-closed" : "lock-open-outline"} size={16} color={overlayLocked ? colors.accent : "#FFFFFF"} />
                   </Pressable>
-                  <Pressable accessibilityLabel="Reset Pose Alignment" style={styles.microToolButton} onPress={resetOverlay}>
+                  <Pressable
+                    accessibilityLabel="Reset Pose Alignment"
+                    style={styles.microToolButton}
+                    onPress={() => {
+                      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                      resetOverlay();
+                    }}
+                  >
                     <Ionicons name="refresh" size={16} color="#FFFFFF" />
                   </Pressable>
                 </View>
@@ -428,6 +517,35 @@ const styles = StyleSheet.create({
   referenceBoundary: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center', overflow: 'visible' },
   cameraLoading: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center', backgroundColor: '#000000', zIndex: 5 },
   cameraPaused: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center', backgroundColor: '#000000' },
+  shutterFlash: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: '#FFFFFF',
+    zIndex: 99,
+  },
+  timerCountdownOverlay: {
+    ...StyleSheet.absoluteFill,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    zIndex: 50,
+  },
+  timerCountdownText: {
+    color: '#FFFFFF',
+    fontSize: 96,
+    fontWeight: '300',
+    letterSpacing: -4,
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 8,
+  },
+  timerButtonLabel: {
+    color: 'rgba(255,255,255,0.75)',
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  timerButtonLabelActive: {
+    color: colors.accent,
+  },
   loadingLabel: { color: colors.textMuted, fontSize: 13, marginTop: spacing.sm },
   overlayError: { ...StyleSheet.absoluteFill, alignItems: 'center', justifyContent: 'center' },
   overlayErrorText: { color: '#FFFFFF', backgroundColor: 'rgba(0,0,0,0.7)', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 16, fontSize: 13 },

@@ -5,12 +5,15 @@ import { Ionicons } from '@expo/vector-icons';
 import * as MediaLibrary from 'expo-media-library';
 import { useState } from 'react';
 import { colors, radii, spacing, typography } from '@/constants/theme';
+import * as Haptics from 'expo-haptics';
+import * as Sharing from 'expo-sharing';
 
 export default function PreviewScreen() {
   const { capturedUri } = useLocalSearchParams<{ capturedUri?: string }>();
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSharing, setIsSharing] = useState(false);
 
   const savePhoto = async () => {
     if (!capturedUri || isSaving || saved) return;
@@ -25,6 +28,7 @@ export default function PreviewScreen() {
       const asset = await MediaLibrary.createAssetAsync(capturedUri);
       if (asset) {
         setSaved(true);
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       } else {
         setError('Could not save photo to device library.');
       }
@@ -33,6 +37,27 @@ export default function PreviewScreen() {
       setError(err?.message || 'We could not save the photo. Please try again.');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const sharePhoto = async () => {
+    if (!capturedUri || isSharing) return;
+    setIsSharing(true);
+    try {
+      const isAvailable = await Sharing.isAvailableAsync();
+      if (!isAvailable) {
+        setError('Sharing is not available on this device.');
+        return;
+      }
+      await Sharing.shareAsync(capturedUri, {
+        mimeType: 'image/jpeg',
+        dialogTitle: 'Share your photo',
+        UTI: 'public.jpeg',
+      });
+    } catch {
+      setError('Could not open the share sheet. Please try again.');
+    } finally {
+      setIsSharing(false);
     }
   };
 
@@ -84,6 +109,18 @@ export default function PreviewScreen() {
           <Pressable accessibilityLabel="Retake Photo" style={({ pressed }) => [styles.retakeButton, pressed && styles.pressed]} onPress={() => router.back()} disabled={isSaving}>
             <Ionicons name="arrow-back" size={18} color="#FFFFFF" />
             <Text style={styles.retakeButtonText}>Retake</Text>
+          </Pressable>
+
+          <Pressable
+            accessibilityLabel="Share photo"
+            style={({ pressed }) => [styles.shareButton, isSharing && styles.disabled, pressed && styles.pressed]}
+            onPress={sharePhoto}
+            disabled={isSharing}
+          >
+            {isSharing
+              ? <ActivityIndicator size="small" color="#FFFFFF" />
+              : <Ionicons name="share-outline" size={19} color="#FFFFFF" />}
+            <Text style={styles.shareButtonText}>Share</Text>
           </Pressable>
 
           <Pressable accessibilityLabel="Save to Photos" style={({ pressed }) => [styles.saveButton, (isSaving || saved) && styles.disabled, pressed && styles.pressed]} onPress={savePhoto} disabled={isSaving || saved}>
@@ -176,6 +213,17 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   retakeButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '600' },
+  shareButton: {
+    flex: 1,
+    height: 52,
+    borderRadius: radii.lg,
+    backgroundColor: colors.blue,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  shareButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '600' },
 
   saveButton: {
     flex: 1.5,

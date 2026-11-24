@@ -215,7 +215,7 @@ Create a minimal privacy policy at a public URL. Easiest approach: GitHub Pages.
 
 ## Task 4 — Haptic Feedback
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🟡 High value  
 **Files to change:** `app/camera.tsx`, `app/preview.tsx`  
 **Install package:** `expo-haptics`
@@ -317,7 +317,7 @@ if (asset) {
 
 ## Task 5 — Shutter Flash Animation
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🟡 High value  
 **Files to change:** `app/camera.tsx` only  
 **No new packages needed** — uses React Native `Animated` from `'react-native'`.
@@ -409,7 +409,7 @@ In `StyleSheet.create({...})` at the bottom of `camera.tsx`, add this entry anyw
 
 ## Task 6 — Self-Timer (3s / 5s / 10s)
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🟡 High value  
 **Files to change:** `app/camera.tsx` only  
 **No new packages needed.**
@@ -584,7 +584,7 @@ In `StyleSheet.create({...})`, add:
 
 ## Task 7 — Share Sheet (Share captured photo)
 
-**Status:** ❌ Not done  
+**Status:** ✅ Done  
 **Priority:** 🟡 High value  
 **Files to change:** `app/preview.tsx` only  
 **Install package:** `expo-sharing`
