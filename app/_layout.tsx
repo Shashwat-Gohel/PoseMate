@@ -14,6 +14,32 @@ export default function RootLayout() {
     SplashScreen.hideAsync();
 
     if (Platform.OS === 'web' && typeof document !== 'undefined') {
+      // 0. Register Service Worker for 100% offline support
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch((err) => {
+            console.log('SW registration failed:', err);
+          });
+        });
+      }
+
+      // Add manifest & Apple Web App meta tags
+      let manifestLink = document.querySelector('link[rel="manifest"]');
+      if (!manifestLink) {
+        manifestLink = document.createElement('link');
+        manifestLink.setAttribute('rel', 'manifest');
+        manifestLink.setAttribute('href', '/manifest.json');
+        document.head.appendChild(manifestLink);
+      }
+
+      let appleMeta = document.querySelector('meta[name="apple-mobile-web-app-capable"]');
+      if (!appleMeta) {
+        appleMeta = document.createElement('meta');
+        appleMeta.setAttribute('name', 'apple-mobile-web-app-capable');
+        appleMeta.setAttribute('content', 'yes');
+        document.head.appendChild(appleMeta);
+      }
+
       // 1. Prevent Safari & mobile browser pinch-to-zoom on the webpage
       let meta = document.querySelector('meta[name="viewport"]');
       if (!meta) {
