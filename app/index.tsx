@@ -170,6 +170,29 @@ export default function HomeScreen() {
           </View>
         </View>
 
+        {/* Explore Pose Ideas Card */}
+        <Pressable
+          accessibilityLabel="Explore Pose Ideas"
+          style={({ pressed }) => [
+            styles.exploreBannerCard,
+            pressed && styles.pressed,
+          ]}
+          onPress={() => router.push('/explore')}
+        >
+          <View style={styles.exploreBannerLeft}>
+            <View style={styles.exploreBannerIconBox}>
+              <Ionicons name="sparkles" size={20} color={colors.accent} />
+            </View>
+            <View>
+              <Text style={styles.exploreBannerTitle}>Explore Pose Ideas</Text>
+              <Text style={styles.exploreBannerSubtitle}>
+                Curated poses for Men & Women across 10 scenes
+              </Text>
+            </View>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={colors.accent} />
+        </Pressable>
+
         {/* iOS Native Button Strip */}
         <View style={styles.actionStrip}>
           <Pressable accessibilityLabel="Open camera" style={({ pressed }) => [styles.primaryCtaButton, pressed && styles.pressed]} onPress={() => router.push({ pathname: '/camera', params: referenceUri ? { referenceUri } : undefined })}>
@@ -350,6 +373,43 @@ const styles = StyleSheet.create({
   },
   emptyCardTitle: { color: colors.text, fontSize: 16, fontWeight: '600', textAlign: 'center' },
   emptyCardSubtitle: { color: colors.textMuted, fontSize: 13, textAlign: 'center', marginTop: 4, maxWidth: 260, lineHeight: 18 },
+
+  exploreBannerCard: {
+    backgroundColor: '#1C1C1E',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 214, 10, 0.3)',
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.md,
+  },
+  exploreBannerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  exploreBannerIconBox: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: 'rgba(255, 214, 10, 0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  exploreBannerTitle: {
+    color: colors.text,
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: -0.2,
+  },
+  exploreBannerSubtitle: {
+    color: colors.textMuted,
+    fontSize: 12,
+    marginTop: 2,
+  },
 
   actionStrip: { gap: spacing.sm, marginBottom: spacing.xl },
   primaryCtaButton: {
