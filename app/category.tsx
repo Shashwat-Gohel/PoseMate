@@ -13,16 +13,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { Asset } from 'expo-asset';
 import * as Haptics from 'expo-haptics';
 import { colors, radii, spacing, typography } from '@/constants/theme';
-import { Gender, PoseEntry, getCategory } from '@/constants/poseLibrary';
+import { PoseEntry, getCategory } from '@/constants/poseLibrary';
 
 export default function CategoryDetailScreen() {
-  const { gender, categoryId } = useLocalSearchParams<{
-    gender?: string;
+  const { categoryId } = useLocalSearchParams<{
     categoryId?: string;
   }>();
 
-  const selectedGender = (gender === 'women' ? 'women' : 'men') as Gender;
-  const category = categoryId ? getCategory(selectedGender, categoryId) : undefined;
+  const category = categoryId ? getCategory(categoryId) : undefined;
 
   const handleSelectPose = async (pose: PoseEntry) => {
     try {
@@ -109,10 +107,18 @@ export default function CategoryDetailScreen() {
               {category.emoji} {category.title}
             </Text>
             <Text style={styles.navSubtitle}>
-              {selectedGender === 'men' ? "Men's Poses" : "Women's Poses"}
+              {category.poses.length} Pose References
             </Text>
           </View>
           <View style={styles.navPlaceholder} />
+        </View>
+
+        {/* Attribution Card */}
+        <View style={styles.attributionBanner}>
+          <Ionicons name="sparkles" size={14} color={colors.accent} />
+          <Text style={styles.attributionBannerText}>
+            Reference photos curated from Pinterest • Credits belong to original creators
+          </Text>
         </View>
 
         {/* Poses Feed */}
@@ -176,6 +182,25 @@ const styles = StyleSheet.create({
   },
   navPlaceholder: {
     width: 60,
+  },
+  attributionBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#161618',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: radii.md,
+    marginBottom: spacing.sm,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: '#2C2C2E',
+  },
+  attributionBannerText: {
+    color: colors.textMuted,
+    fontSize: 11,
+    fontWeight: '500',
+    flexShrink: 1,
   },
   listContent: {
     paddingBottom: spacing.xxl,

@@ -14,23 +14,14 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { colors, radii, spacing, typography } from '@/constants/theme';
 import {
-  Gender,
   PoseCategory,
-  getCategoriesByGender,
+  getCategories,
 } from '@/constants/poseLibrary';
 
 export default function ExploreScreen() {
-  const [selectedGender, setSelectedGender] = useState<Gender>('men');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const handleGenderSwitch = (gender: Gender) => {
-    if (gender !== selectedGender) {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      setSelectedGender(gender);
-    }
-  };
-
-  const categories = getCategoriesByGender(selectedGender);
+  const categories = getCategories();
   const filteredCategories = searchQuery.trim()
     ? categories.filter((c) =>
         c.title.toLowerCase().includes(searchQuery.toLowerCase().trim())
@@ -52,7 +43,6 @@ export default function ExploreScreen() {
           router.push({
             pathname: '/category',
             params: {
-              gender: selectedGender,
               categoryId: item.id,
             },
           });
@@ -110,43 +100,17 @@ export default function ExploreScreen() {
           <View style={styles.navPlaceholder} />
         </View>
 
-        {/* Gender Segmented Switcher */}
-        <View style={styles.genderSwitcherContainer}>
-          <Pressable
-            accessibilityLabel="Select Men Poses"
-            style={[
-              styles.genderTab,
-              selectedGender === 'men' && styles.genderTabActive,
-            ]}
-            onPress={() => handleGenderSwitch('men')}
-          >
-            <Text
-              style={[
-                styles.genderTabText,
-                selectedGender === 'men' && styles.genderTabTextActive,
-              ]}
-            >
-              👨 Men
+        {/* Pinterest Attribution & Credits Notice */}
+        <View style={styles.disclaimerCard}>
+          <View style={styles.disclaimerIconContainer}>
+            <Ionicons name="information-circle" size={20} color={colors.accent} />
+          </View>
+          <View style={styles.disclaimerTextContainer}>
+            <Text style={styles.disclaimerTitle}>Reference Attribution</Text>
+            <Text style={styles.disclaimerText}>
+              All pose reference images are curated from Pinterest. All rights, credits, and intellectual property belong entirely to their respective original creators and photographers.
             </Text>
-          </Pressable>
-
-          <Pressable
-            accessibilityLabel="Select Women Poses"
-            style={[
-              styles.genderTab,
-              selectedGender === 'women' && styles.genderTabActive,
-            ]}
-            onPress={() => handleGenderSwitch('women')}
-          >
-            <Text
-              style={[
-                styles.genderTabText,
-                selectedGender === 'women' && styles.genderTabTextActive,
-              ]}
-            >
-              👩 Women
-            </Text>
-          </Pressable>
+          </View>
         </View>
 
         {/* Search Bar */}
@@ -154,7 +118,7 @@ export default function ExploreScreen() {
           <Ionicons name="search" size={17} color={colors.textMuted} />
           <TextInput
             style={styles.searchInput}
-            placeholder={`Search ${selectedGender === 'men' ? 'Men' : 'Women'} categories...`}
+            placeholder="Search categories (e.g. Beach, Sunset, Cafe)..."
             placeholderTextColor={colors.textMuted}
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -230,33 +194,36 @@ const styles = StyleSheet.create({
   navPlaceholder: {
     width: 60,
   },
-  genderSwitcherContainer: {
+  disclaimerCard: {
     flexDirection: 'row',
-    backgroundColor: '#1C1C1E',
-    borderRadius: radii.pill,
-    padding: 4,
-    marginVertical: spacing.sm,
+    backgroundColor: '#161618',
+    borderRadius: 14,
+    padding: 12,
+    marginTop: spacing.xs,
+    marginBottom: spacing.sm,
     borderWidth: 1,
     borderColor: '#2C2C2E',
+    gap: 10,
+    alignItems: 'flex-start',
   },
-  genderTab: {
+  disclaimerIconContainer: {
+    marginTop: 2,
+  },
+  disclaimerTextContainer: {
     flex: 1,
-    paddingVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: radii.pill,
   },
-  genderTabActive: {
-    backgroundColor: colors.accent,
-  },
-  genderTabText: {
-    color: colors.textMuted,
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  genderTabTextActive: {
-    color: '#000000',
+  disclaimerTitle: {
+    color: colors.accent,
+    fontSize: 12,
     fontWeight: '700',
+    marginBottom: 2,
+    letterSpacing: 0.3,
+    textTransform: 'uppercase',
+  },
+  disclaimerText: {
+    color: colors.textMuted,
+    fontSize: 11.5,
+    lineHeight: 16,
   },
   searchContainer: {
     flexDirection: 'row',

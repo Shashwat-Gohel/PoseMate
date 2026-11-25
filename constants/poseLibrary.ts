@@ -1,5 +1,3 @@
-export type Gender = 'men' | 'women';
-
 export interface PoseEntry {
   id: string;
   image: any;
@@ -13,7 +11,7 @@ export interface PoseCategory {
   poses: PoseEntry[];
 }
 
-export const MEN_CATEGORIES: PoseCategory[] = [
+export const POSE_CATEGORIES: PoseCategory[] = [
   {
     id: 'beach',
     title: 'Beach & Ocean',
@@ -134,40 +132,6 @@ export const MEN_CATEGORIES: PoseCategory[] = [
     ],
   },
   {
-    id: 'professional',
-    title: 'Professional & Formals',
-    emoji: '👔',
-    poses: [
-      { id: 'men-professional-01', image: require('@/assets/poses/men/professional/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'men-professional-02', image: require('@/assets/poses/men/professional/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'men-professional-03', image: require('@/assets/poses/men/professional/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'men-professional-04', image: require('@/assets/poses/men/professional/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'men-professional-05', image: require('@/assets/poses/men/professional/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'men-professional-06', image: require('@/assets/poses/men/professional/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'men-professional-07', image: require('@/assets/poses/men/professional/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'men-professional-08', image: require('@/assets/poses/men/professional/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'men-professional-09', image: require('@/assets/poses/men/professional/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'men-professional-10', image: require('@/assets/poses/men/professional/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
-    id: 'fitness',
-    title: 'Fitness & Gym',
-    emoji: '🏋️',
-    poses: [
-      { id: 'men-fitness-01', image: require('@/assets/poses/men/fitness/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'men-fitness-02', image: require('@/assets/poses/men/fitness/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'men-fitness-03', image: require('@/assets/poses/men/fitness/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'men-fitness-04', image: require('@/assets/poses/men/fitness/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'men-fitness-05', image: require('@/assets/poses/men/fitness/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'men-fitness-06', image: require('@/assets/poses/men/fitness/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'men-fitness-07', image: require('@/assets/poses/men/fitness/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'men-fitness-08', image: require('@/assets/poses/men/fitness/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'men-fitness-09', image: require('@/assets/poses/men/fitness/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'men-fitness-10', image: require('@/assets/poses/men/fitness/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
     id: 'festive',
     title: 'Party & Festive',
     emoji: '🎉',
@@ -186,184 +150,10 @@ export const MEN_CATEGORIES: PoseCategory[] = [
   },
 ];
 
-export const WOMEN_CATEGORIES: PoseCategory[] = [
-  {
-    id: 'beach',
-    title: 'Beach & Ocean',
-    emoji: '🏖️',
-    poses: [
-      { id: 'women-beach-01', image: require('@/assets/poses/women/beach/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'women-beach-02', image: require('@/assets/poses/women/beach/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'women-beach-03', image: require('@/assets/poses/women/beach/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'women-beach-04', image: require('@/assets/poses/women/beach/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'women-beach-05', image: require('@/assets/poses/women/beach/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'women-beach-06', image: require('@/assets/poses/women/beach/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'women-beach-07', image: require('@/assets/poses/women/beach/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'women-beach-08', image: require('@/assets/poses/women/beach/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'women-beach-09', image: require('@/assets/poses/women/beach/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'women-beach-10', image: require('@/assets/poses/women/beach/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
-    id: 'mountains',
-    title: 'Mountains & Hiking',
-    emoji: '🏔️',
-    poses: [
-      { id: 'women-mountains-01', image: require('@/assets/poses/women/mountains/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'women-mountains-02', image: require('@/assets/poses/women/mountains/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'women-mountains-03', image: require('@/assets/poses/women/mountains/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'women-mountains-04', image: require('@/assets/poses/women/mountains/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'women-mountains-05', image: require('@/assets/poses/women/mountains/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'women-mountains-06', image: require('@/assets/poses/women/mountains/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'women-mountains-07', image: require('@/assets/poses/women/mountains/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'women-mountains-08', image: require('@/assets/poses/women/mountains/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'women-mountains-09', image: require('@/assets/poses/women/mountains/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'women-mountains-10', image: require('@/assets/poses/women/mountains/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
-    id: 'city',
-    title: 'City & Urban',
-    emoji: '🌆',
-    poses: [
-      { id: 'women-city-01', image: require('@/assets/poses/women/city/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'women-city-02', image: require('@/assets/poses/women/city/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'women-city-03', image: require('@/assets/poses/women/city/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'women-city-04', image: require('@/assets/poses/women/city/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'women-city-05', image: require('@/assets/poses/women/city/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'women-city-06', image: require('@/assets/poses/women/city/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'women-city-07', image: require('@/assets/poses/women/city/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'women-city-08', image: require('@/assets/poses/women/city/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'women-city-09', image: require('@/assets/poses/women/city/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'women-city-10', image: require('@/assets/poses/women/city/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
-    id: 'cafe',
-    title: 'Café & Lifestyle',
-    emoji: '☕',
-    poses: [
-      { id: 'women-cafe-01', image: require('@/assets/poses/women/cafe/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'women-cafe-02', image: require('@/assets/poses/women/cafe/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'women-cafe-03', image: require('@/assets/poses/women/cafe/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'women-cafe-04', image: require('@/assets/poses/women/cafe/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'women-cafe-05', image: require('@/assets/poses/women/cafe/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'women-cafe-06', image: require('@/assets/poses/women/cafe/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'women-cafe-07', image: require('@/assets/poses/women/cafe/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'women-cafe-08', image: require('@/assets/poses/women/cafe/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'women-cafe-09', image: require('@/assets/poses/women/cafe/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'women-cafe-10', image: require('@/assets/poses/women/cafe/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
-    id: 'sunset',
-    title: 'Sunset & Golden Hour',
-    emoji: '🌅',
-    poses: [
-      { id: 'women-sunset-01', image: require('@/assets/poses/women/sunset/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'women-sunset-02', image: require('@/assets/poses/women/sunset/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'women-sunset-03', image: require('@/assets/poses/women/sunset/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'women-sunset-04', image: require('@/assets/poses/women/sunset/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'women-sunset-05', image: require('@/assets/poses/women/sunset/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'women-sunset-06', image: require('@/assets/poses/women/sunset/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'women-sunset-07', image: require('@/assets/poses/women/sunset/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'women-sunset-08', image: require('@/assets/poses/women/sunset/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'women-sunset-09', image: require('@/assets/poses/women/sunset/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'women-sunset-10', image: require('@/assets/poses/women/sunset/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
-    id: 'monuments',
-    title: 'Monuments & Travel',
-    emoji: '🏛️',
-    poses: [
-      { id: 'women-monuments-01', image: require('@/assets/poses/women/monuments/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'women-monuments-02', image: require('@/assets/poses/women/monuments/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'women-monuments-03', image: require('@/assets/poses/women/monuments/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'women-monuments-04', image: require('@/assets/poses/women/monuments/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'women-monuments-05', image: require('@/assets/poses/women/monuments/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'women-monuments-06', image: require('@/assets/poses/women/monuments/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'women-monuments-07', image: require('@/assets/poses/women/monuments/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'women-monuments-08', image: require('@/assets/poses/women/monuments/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'women-monuments-09', image: require('@/assets/poses/women/monuments/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'women-monuments-10', image: require('@/assets/poses/women/monuments/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
-    id: 'roadtrip',
-    title: 'Car & Road Trip',
-    emoji: '🚗',
-    poses: [
-      { id: 'women-roadtrip-01', image: require('@/assets/poses/women/roadtrip/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'women-roadtrip-02', image: require('@/assets/poses/women/roadtrip/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'women-roadtrip-03', image: require('@/assets/poses/women/roadtrip/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'women-roadtrip-04', image: require('@/assets/poses/women/roadtrip/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'women-roadtrip-05', image: require('@/assets/poses/women/roadtrip/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'women-roadtrip-06', image: require('@/assets/poses/women/roadtrip/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'women-roadtrip-07', image: require('@/assets/poses/women/roadtrip/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'women-roadtrip-08', image: require('@/assets/poses/women/roadtrip/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'women-roadtrip-09', image: require('@/assets/poses/women/roadtrip/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'women-roadtrip-10', image: require('@/assets/poses/women/roadtrip/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
-    id: 'professional',
-    title: 'Professional & Formals',
-    emoji: '👔',
-    poses: [
-      { id: 'women-professional-01', image: require('@/assets/poses/women/professional/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'women-professional-02', image: require('@/assets/poses/women/professional/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'women-professional-03', image: require('@/assets/poses/women/professional/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'women-professional-04', image: require('@/assets/poses/women/professional/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'women-professional-05', image: require('@/assets/poses/women/professional/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'women-professional-06', image: require('@/assets/poses/women/professional/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'women-professional-07', image: require('@/assets/poses/women/professional/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'women-professional-08', image: require('@/assets/poses/women/professional/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'women-professional-09', image: require('@/assets/poses/women/professional/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'women-professional-10', image: require('@/assets/poses/women/professional/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
-    id: 'fitness',
-    title: 'Fitness & Gym',
-    emoji: '🏋️',
-    poses: [
-      { id: 'women-fitness-01', image: require('@/assets/poses/women/fitness/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'women-fitness-02', image: require('@/assets/poses/women/fitness/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'women-fitness-03', image: require('@/assets/poses/women/fitness/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'women-fitness-04', image: require('@/assets/poses/women/fitness/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'women-fitness-05', image: require('@/assets/poses/women/fitness/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'women-fitness-06', image: require('@/assets/poses/women/fitness/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'women-fitness-07', image: require('@/assets/poses/women/fitness/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'women-fitness-08', image: require('@/assets/poses/women/fitness/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'women-fitness-09', image: require('@/assets/poses/women/fitness/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'women-fitness-10', image: require('@/assets/poses/women/fitness/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-  {
-    id: 'festive',
-    title: 'Party & Festive',
-    emoji: '🎉',
-    poses: [
-      { id: 'women-festive-01', image: require('@/assets/poses/women/festive/pose-01.jpg'), caption: 'Pose 1' },
-      { id: 'women-festive-02', image: require('@/assets/poses/women/festive/pose-02.jpg'), caption: 'Pose 2' },
-      { id: 'women-festive-03', image: require('@/assets/poses/women/festive/pose-03.jpg'), caption: 'Pose 3' },
-      { id: 'women-festive-04', image: require('@/assets/poses/women/festive/pose-04.jpg'), caption: 'Pose 4' },
-      { id: 'women-festive-05', image: require('@/assets/poses/women/festive/pose-05.jpg'), caption: 'Pose 5' },
-      { id: 'women-festive-06', image: require('@/assets/poses/women/festive/pose-06.jpg'), caption: 'Pose 6' },
-      { id: 'women-festive-07', image: require('@/assets/poses/women/festive/pose-07.jpg'), caption: 'Pose 7' },
-      { id: 'women-festive-08', image: require('@/assets/poses/women/festive/pose-08.jpg'), caption: 'Pose 8' },
-      { id: 'women-festive-09', image: require('@/assets/poses/women/festive/pose-09.jpg'), caption: 'Pose 9' },
-      { id: 'women-festive-10', image: require('@/assets/poses/women/festive/pose-10.jpg'), caption: 'Pose 10' },
-    ],
-  },
-];
+export function getCategories(): PoseCategory[] {
+  return POSE_CATEGORIES;
+}
 
-export const getCategoriesByGender = (gender: Gender): PoseCategory[] => {
-  return gender === 'women' ? WOMEN_CATEGORIES : MEN_CATEGORIES;
-};
-
-export const getCategory = (gender: Gender, categoryId: string): PoseCategory | undefined => {
-  const list = getCategoriesByGender(gender);
-  return list.find((c) => c.id === categoryId);
-};
+export function getCategory(categoryId: string): PoseCategory | undefined {
+  return POSE_CATEGORIES.find((cat) => cat.id === categoryId);
+}
