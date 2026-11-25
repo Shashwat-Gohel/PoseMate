@@ -84,6 +84,8 @@ export default function RootLayout() {
       <AppErrorBoundary>
         <Stack screenOptions={{ headerShown: false, animation: 'fade' }}>
           <Stack.Screen name="camera" options={{ gestureEnabled: false }} />
+          <Stack.Screen name="explore" options={{ gestureEnabled: true }} />
+          <Stack.Screen name="category" options={{ gestureEnabled: true }} />
         </Stack>
       </AppErrorBoundary>
     </>
