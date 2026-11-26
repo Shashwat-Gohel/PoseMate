@@ -20,7 +20,8 @@
           "photosPermission": "PoseMate uses your photo library to select reference poses.",
           "savePhotosPermission": "PoseMate saves your finished photographs to your photo library."
         }
-      ]
+      ],
+      "expo-sharing"
     ],
     "ios": {
       "bundleIdentifier": "com.posemate.app",
